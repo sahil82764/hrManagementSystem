@@ -11,7 +11,7 @@ class ClientView:
         window.resizable(0, 0)
         self.window.state('zoomed')
         window.title("ADD / VIEW Mandays")
-        self.txt = "MANDAYS"
+        self.txt = "VENDORS"
         self.color = ["#4f4e4d", "#f29844", "red2"]
         self.heading = Label(self.window, text=self.txt, font=('yu gothic ui', 30, "bold"), bg="white",
                              fg='black',

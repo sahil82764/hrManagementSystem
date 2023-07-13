@@ -3,6 +3,7 @@ from ttkthemes import themed_tk as tk
 from tkinter import messagebox
 import mandaysView
 import clientView
+import billView
 
 
 class Dashboard:
@@ -32,7 +33,7 @@ class Dashboard:
 
         # CLIENT
         self.clientBtn = Button(self.window, text="CLIENTS", cursor='hand2', font=('Arial',13, 'bold'), fg="white", bg='#9a258f', activebackground='white', command=lambda: self.clientView())
-        self.homeBtn.place(x=37, y=167, width=118, height=45)
+        self.clientBtn.place(x=37, y=167, width=118, height=45)
 
         # MANDAYS
         self.mandayBtn = Button(self.window, text="MANDAYS", cursor='hand2', font=('Arial',13, 'bold'), fg="white", bg='#9a258f', activebackground='white', command=lambda: self.mandayView())
@@ -43,22 +44,25 @@ class Dashboard:
         self.billBtn.place(x=37, y=276, width=118, height=45)
 
     def homeView(self):
-        win1 = Toplevel()
+        winHome = Toplevel()
 
     def clientView(self):
-        win2 = Toplevel()
-        clientView.ClientView(win2)
+        winClient = Toplevel()
+        clientView.ClientView(winClient)
         self.window.withdraw()
-        win2.deiconify()
+        winClient.deiconify()
 
     def mandayView(self):
-        win3 = Toplevel()
-        mandaysView.MandaysView(win3)
+        winMandays = Toplevel()
+        mandaysView.MandaysView(winMandays)
         self.window.withdraw()
-        win3.deiconify()
+        winMandays.deiconify()
 
     def billView(self):
-        pass
+        winBill = Toplevel()
+        billView.BillView(winBill)
+        self.window.withdraw()
+        winBill.deiconify()
 
     def exitCommand(self):
         exit_command = messagebox.askyesno("EXIT??", "Are you sure you want to exit?")
