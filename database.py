@@ -1,10 +1,9 @@
 import pyodbc
 import logging
 
-
-serverName = '--'
-databaseName = '--'
-driver = '{ODBC Driver 17 for SQL Server}'
+# serverName = '--'
+# databaseName = '--'
+# driver = '{ODBC Driver 17 for SQL Server}'
 
 class Database:
     def __init__(self):

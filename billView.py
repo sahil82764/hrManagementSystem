@@ -91,8 +91,11 @@ class BillView:
         self.attendencePath_label = Label(window, text="File Path:")
         self.attendencePath_label.grid(row=8, column=0, padx=(50, 10), pady=10)
 
-        self.attendencePath_entry = Entry(self.window, textvariable=self.attendencePath, state='readonly')
+        self.attendencePath_entry = Entry(self.window, textvariable=self.attendencePath)
         self.attendencePath_entry.grid(row=8, column=1, padx=(50, 10), pady=10)
+
+        self.next_btn = Button(self.window, text="NEXT", command=lambda: self.next_operation())
+        self.next_btn.grid(row=9, column=0, columnspan=3, padx=(50, 10), pady=10)
 
     def fetchData(self, event):
 
@@ -154,19 +157,29 @@ class BillView:
                 self.attendencePath_entry.config(state='readonly')
 
     def upload_attendence(self):
-
-        if (
-            self.vendor.get() and self.po_no.get() and self.selectedStation.get() and
-            self.contractStart_date.get() and self.contractEnd_date.get() and self.operator_name.get()
-        ):
-            filePath = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx;*.xls")])
+        try:
+            self.filePath = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx;*.xls")])
+            self.attendencePath_entry.config(state='normal')
             self.attendencePath_entry.delete(0, END)  # Clear previous path, if any
-            self.attendencePath_entry.insert(END, filePath)  # Display the selected path
+            self.attendencePath_entry.insert(END, self.filePath)  # Display the selected path
             self.attendencePath_entry.config(state='readonly')
-            
+        
+        except Exception as e:
+            print(e)
+
+
+    def next_operation(self):
+        if (
+            self.vendor.get() and self.po_no.get() and self.selectedStation.get() and self.contractStart_date.get() and self.contractEnd_date.get() and self.operator_name.get() and self.attendencePath.get()):
+            # All fields are filled, perform the add mandays operation
+            self.perform_bill_operation()
         else:
             # Display an error message if any field is empty
             messagebox.showerror("Error", "Please fill in all the fields.")
+
+    def perform_bill_operation(self):
+        pass
+
 
         
          
