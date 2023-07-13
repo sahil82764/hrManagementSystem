@@ -50,6 +50,8 @@ class Dashboard:
     def mandayView(self):
         win3 = Toplevel()
         mandaysView.MandaysView(win3)
+        self.window.withdraw()
+        win3.deiconify()
 
     def billView(self):
         pass

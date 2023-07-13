@@ -1,10 +1,15 @@
 from tkinter import *
 from tkinter import ttk
 import datetime
+from util import util
+from openpyxl import load_workbook
+from tkinter import messagebox
+import dashboard
+import mandaysView
 
 
 class AddMandays:
-    def __init__(self, window, contractStart, contractEnd):
+    def __init__(self, window, contractEnd, vendorName, stationName):
         self.window = window
         self.window.geometry("1366x768")
         self.window.title("Add Mandays")
@@ -24,26 +29,28 @@ class AddMandays:
         # self.contractEnd = contractEnd
 
         # =================== INPUT VARIABLES =================
-        self.mgr_wd = StringVar
-        self.mgr_off = StringVar
-        self.mgr_cl = StringVar
-        self.mgr_ft = StringVar
-        self.mgr_fh = StringVar
-        self.mgr_nh = StringVar
-        self.dsm_wd = StringVar
-        self.dsm_off = StringVar
-        self.dsm_cl = StringVar
-        self.dsm_ft = StringVar
-        self.dsm_fh = StringVar
-        self.dsm_nh = StringVar
-        self.tech_wd = StringVar
-        self.tech_off = StringVar
-        self.tech_cl = StringVar
-        self.tech_ft = StringVar
-        self.tech_fh = StringVar
-        self.tech_nh = StringVar
-        self.year = StringVar
-        self.month = StringVar
+        self.mgr_wd = StringVar()
+        self.mgr_off = StringVar()
+        self.mgr_cl = StringVar()
+        self.mgr_ft = StringVar()
+        self.mgr_fh = StringVar()
+        self.mgr_nh = StringVar()
+        self.dsm_wd = StringVar()
+        self.dsm_off = StringVar()
+        self.dsm_cl = StringVar()
+        self.dsm_ft = StringVar()
+        self.dsm_fh = StringVar()
+        self.dsm_nh = StringVar()
+        self.tech_wd = StringVar()
+        self.tech_off = StringVar()
+        self.tech_cl = StringVar()
+        self.tech_ft = StringVar()
+        self.tech_fh = StringVar()
+        self.tech_nh = StringVar()
+        self.year = StringVar()
+        self.month = StringVar()
+        self.vName = vendorName
+        self.sName = stationName
 
         # ================ LABELS =============================
 
@@ -168,10 +175,67 @@ class AddMandays:
         self.saveMandays_btn = Button(self.window, text="SAVE", width=15, height=1, font=('Arial', 15, "bold"), command=lambda: self.save_mandays())
         self.saveMandays_btn.grid(row=9, column=0, columnspan=3,  padx=(50, 10), pady=10)
 
+        self.back_btn = Button(self.window, text="BACK", width=15, height=1, font=('Arial', 15, "bold"), command=lambda: self.back_operation())
+        self.back_btn.grid(row=9, column=1, columnspan=3,  padx=(50, 10), pady=10)
+
     def save_mandays(self):
-        # write invalid blank conditions
-        pass
+        if (
+            self.mgr_wd.get() and self.mgr_off.get() and self.mgr_cl.get() and self.mgr_ft.get() and self.mgr_fh.get() and self.mgr_nh.get() and self.dsm_wd.get() and self.dsm_off.get() and self.dsm_cl.get() and self.dsm_ft.get() and self.dsm_fh.get() and self.dsm_nh.get() and self.tech_wd.get() and self.tech_off.get() and self.tech_cl.get() and self.tech_ft.get() and self.tech_fh.get() and self.tech_nh.get() and self.year.get() and self.month.get()):
+            # All fields are filled, perform the save operation
+            self.perform_save_operation()
+        else:
+            # Display an error message if any field is empty
+            messagebox.showerror("Error", "Please fill in all the fields.")
 
+    def back_operation(self):
+        win = Toplevel()
+        mandaysView.MandaysView(win)
+        self.window.withdraw()
+        win.deiconify()
+        
 
+    def perform_save_operation(self):
+        try:
+            fPath = util.get_custom_mandays()
+            customMandays = load_workbook(fPath)
+            activeSheet = customMandays.active
+
+            # manager entries
+            activeSheet['B2'] = self.mgr_wd.get()
+            activeSheet['C2'] = self.mgr_off.get()
+            activeSheet['D2'] = self.mgr_cl.get()
+            activeSheet['E2'] = self.mgr_ft.get()
+            activeSheet['F2'] = self.mgr_fh.get()
+            activeSheet['G2'] = self.mgr_nh.get()
+
+            # technician entries
+            activeSheet['B3'] = self.tech_wd.get()
+            activeSheet['C3'] = self.tech_off.get()
+            activeSheet['D3'] = self.tech_cl.get()
+            activeSheet['E3'] = self.tech_ft.get()
+            activeSheet['F3'] = self.tech_fh.get()
+            activeSheet['G3'] = self.tech_nh.get()
+
+            # dsm entries
+            activeSheet['B4'] = self.dsm_wd.get()
+            activeSheet['C4'] = self.dsm_off.get()
+            activeSheet['D4'] = self.dsm_cl.get()
+            activeSheet['E4'] = self.dsm_ft.get()
+            activeSheet['F4'] = self.dsm_fh.get()
+            activeSheet['G4'] = self.dsm_nh.get()
+
+            #saving the modified workbook
+            savePath = util.save_mandays_claimed(str(self.year.get()), str(self.month.get()), self.vName.get(), str(self.sName.get()))
+            customMandays.save(savePath)
+
+            win = Toplevel()
+            dashboard.Dashboard(win)
+            self.window.withdraw()
+            win.deiconify()
+
+        except Exception as e:
+            print(e)
+            
+            
                          
         

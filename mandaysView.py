@@ -5,6 +5,7 @@ from tkinter import messagebox
 import database
 import datetime
 import addMandays
+import dashboard
 
 
 class MandaysView:
@@ -85,7 +86,10 @@ class MandaysView:
         self.operator_name.grid(row=6, column=1, padx=(50, 10), pady=10)
 
         self.addMandays_btn = Button(self.window, text="Add Mandays", command=lambda: self.add_mandays())
-        self.addMandays_btn.grid(row=7, column=0, columnspan=3, padx=(50, 10), pady=10)
+        self.addMandays_btn.grid(row=7, column=0, columnspan=2, padx=(50, 10), pady=10)
+
+        self.back_btn = Button(self.window, text="BACK", command=lambda: self.back_operation())
+        self.back_btn.grid(row=7, column=1, columnspan=2, padx=(50, 10), pady=10)
 
     def fetchData(self, event):
 
@@ -144,9 +148,28 @@ class MandaysView:
 
     def add_mandays(self):
         
-        # write invalid blank conditions
+        if (
+            self.vendor.get() and self.po_no.get() and self.selectedStation.get() and
+            self.contractStart_date.get() and self.contractEnd_date.get() and self.operator_name.get()
+        ):
+            # All fields are filled, perform the add mandays operation
+            self.perform_add_mandays_operation()
+        else:
+            # Display an error message if any field is empty
+            messagebox.showerror("Error", "Please fill in all the fields.")
+
+    def back_operation(self):
+        win = Toplevel()
+        dashboard.Dashboard(win)
+        self.window.withdraw()
+        win.deiconify()
+            
         
+    def perform_add_mandays_operation(self):
+
         win4 = Toplevel()
-        addMandays.AddMandays(win4, self.contractStart, self.contractEnd)
+        addMandays.AddMandays(win4, self.contractEnd, self.vendor, self.selectedStation)
+        self.window.withdraw()
+        win4.deiconify()
             
         
