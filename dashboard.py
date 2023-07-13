@@ -2,6 +2,7 @@ from tkinter import *
 from ttkthemes import themed_tk as tk
 from tkinter import messagebox
 import mandaysView
+import clientView
 
 
 class Dashboard:
@@ -46,6 +47,9 @@ class Dashboard:
 
     def clientView(self):
         win2 = Toplevel()
+        clientView.ClientView(win2)
+        self.window.withdraw()
+        win2.deiconify()
 
     def mandayView(self):
         win3 = Toplevel()
