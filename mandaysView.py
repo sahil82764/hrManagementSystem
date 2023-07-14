@@ -42,14 +42,7 @@ class MandaysView:
         self.vendor_label = Label(self.window, text="Vendor Name:")
         self.vendor_label.grid(row=1, column=0, padx=(50, 10), pady=10)
 
-        databaseConnection = database.connectSQL()
-        dbCursor = databaseConnection.cursor()
-        dbCursor.execute('SELECT DISTINCT Vendor_Name FROM vendor')
-        results = dbCursor.fetchall()
-        self.vendorNames = [row[0] for row in results]
-        dbCursor.close()
-        databaseConnection.close()
-
+        self.vendorNames = database.get_vendors_only()
         
         self.vendor_combo = ttk.Combobox(self.window, values= self.vendorNames, textvariable=self.vendor, state='readonly')
         self.vendor_combo.grid(row=1, column=1, padx=(50, 10), pady=10)
@@ -135,7 +128,6 @@ class MandaysView:
             
         
     def perform_add_mandays_operation(self):
-
         winAddMandays = Toplevel()
         addMandays.AddMandays(winAddMandays, self.contractEnd, self.vendor, self.selectedStation)
         self.window.withdraw()

@@ -1,9 +1,6 @@
 import pyodbc
 import logging
 
-serverName = 'LAPTOP-NFRNM2TK'
-databaseName = 'igl_client'
-driver = '{ODBC Driver 17 for SQL Server}'
 
 # serverName = '--'
 # databaseName = '--'
@@ -20,6 +17,16 @@ def connectSQL():
         return dbConnection
     except Exception as e:
         logging.error("Error while connecting to SQL Server: ", e)
+
+def get_vendors_only():
+    databaseConnection = connectSQL()
+    dbCursor = databaseConnection.cursor()
+    dbCursor.execute('SELECT DISTINCT Vendor_Name FROM vendor')
+    results = dbCursor.fetchall()
+    vendorNames = [row[0] for row in results]
+    dbCursor.close()
+    databaseConnection.close()
+    return vendorNames
 
 def get_vendor_data(vendorName):
     try:
