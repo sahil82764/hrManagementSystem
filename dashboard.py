@@ -33,15 +33,15 @@ class Dashboard:
 
         # CLIENT
         self.clientBtn = Button(self.window, text="CLIENTS", cursor='hand2', font=('Arial',13, 'bold'), fg="white", bg='#9a258f', activebackground='white', command=lambda: self.clientView())
-        self.clientBtn.place(x=37, y=167, width=118, height=45)
+        self.clientBtn.place(x=37, y=276, width=118, height=45)
 
         # MANDAYS
         self.mandayBtn = Button(self.window, text="MANDAYS", cursor='hand2', font=('Arial',13, 'bold'), fg="white", bg='#9a258f', activebackground='white', command=lambda: self.mandayView())
-        self.mandayBtn.place(x=37, y=222, width=118, height=45)
+        self.mandayBtn.place(x=37, y=167, width=118, height=45)
 
         # BILL
         self.billBtn = Button(self.window, text="BILL", cursor='hand2', font=('Arial',13, 'bold'), fg="white", bg='#9a258f', activebackground='white', command=lambda: self.billView())
-        self.billBtn.place(x=37, y=276, width=118, height=45)
+        self.billBtn.place(x=37, y=222, width=118, height=45)
 
     def homeView(self):
         winHome = Toplevel()

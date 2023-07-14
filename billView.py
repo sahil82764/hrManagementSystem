@@ -113,7 +113,7 @@ class BillView:
         self.attendencePath_label.grid(row=10, column=0, padx=(50, 10), pady=10)
 
         self.attendencePath_entry = Entry(self.window, textvariable=self.attendencePath)
-        self.attendencePath_entry.grid(row=10, column=1, padx=(50, 10), pady=10)
+        self.attendencePath_entry.grid(row=10, column=1, columnspan=4, padx=(50, 10), pady=10, sticky="ew")
 
         # Bill Year
         self.billYear_label = Label(window, text="YEAR")
@@ -216,7 +216,7 @@ class BillView:
         if (
             self.vendor.get() and self.po.get() and self.selectedStation.get() and self.contractStart.get() and self.operator_name.get() and self.gst.get() and self.pan.get() and self.attendencePath.get() and self.billYear.get() and self.billMonth.get()):
             # All fields are filled, perform the add mandays operation
-            self.get_active_mandays()
+            # self.get_active_mandays()
             self.perform_wage_operation()
         else:
             # Display an error message if any field is empty
