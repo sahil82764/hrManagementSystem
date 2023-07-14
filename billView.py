@@ -6,6 +6,9 @@ from tkinter import filedialog
 import datetime
 import dashboard
 import database
+import pandas as pd
+from util import util
+import wageView
 
 class BillView:
     def __init__(self, window):
@@ -38,6 +41,8 @@ class BillView:
         self.pan = StringVar()
         self.operator = StringVar()
         self.attendencePath = StringVar()
+        self.billYear = StringVar()
+        self.billMonth = StringVar()
         
         # ============ VENDOR NAME =================================
         self.vendor_label = Label(self.window, text="Vendor Name:")
@@ -110,9 +115,27 @@ class BillView:
         self.attendencePath_entry = Entry(self.window, textvariable=self.attendencePath)
         self.attendencePath_entry.grid(row=10, column=1, padx=(50, 10), pady=10)
 
+        # Bill Year
+        self.billYear_label = Label(window, text="YEAR")
+        self.billYear_label.grid(row=11, column=0, padx=(50, 10), pady=10)
+
+        self.billYear_entry = ttk.Combobox(self.window, values=[" "], textvariable=self.billYear, state='readonly')
+        self.billYear_entry.grid(row=11, column=1, padx=(50, 10), pady=10)
+
+        # Bill Month
+        self.billMonth_label = Label(window, text="MONTH")
+        self.billMonth_label.grid(row=12, column=0, padx=(50, 10), pady=10)
+
+        self.billMonth_entry = ttk.Combobox(self.window, values=[" "], textvariable=self.billMonth, state='readonly')
+        self.billMonth_entry.grid(row=12, column=1, padx=(50, 10), pady=10)
+
         # Next Button
         self.next_btn = Button(self.window, text="NEXT", command=lambda: self.next_operation())
-        self.next_btn.grid(row=11, column=0, columnspan=3, padx=(50, 10), pady=10)
+        self.next_btn.grid(row=13, column=0, columnspan=2, padx=(50, 10), pady=10)
+
+        # Back Button
+        self.back_btn = Button(self.window, text="BACK", command=lambda: self.back_operation())
+        self.back_btn.grid(row=13, column=1, columnspan=2, padx=(50, 10), pady=10)
 
     def fetchData(self, event):
 
@@ -121,6 +144,11 @@ class BillView:
                 self.vendor_data_dictionary = database.get_vendor_data(self.vendor.get())
 
                 self.contractEnd = datetime.datetime.strptime(self.vendor_data_dictionary['Contract Date'], '%Y-%m-%d').date()  + datetime.timedelta(days=365*5)
+
+                yearList = []
+                for year in range(datetime.datetime.now().year, self.contractEnd.year + 1):
+                    yearList.append(year)
+
                 
                 self.po_no.config(state='normal')
                 self.po_no.delete(0, END)
@@ -137,7 +165,7 @@ class BillView:
                 self.station_name.config(values=self.vendor_data_dictionary['Station Name'])
                 self.station_name.current(0)
 
-                
+
                 self.contractStart_date.config(state='normal')
                 self.contractStart_date.delete(0, END)
                 self.contractStart_date.insert(0, self.vendor_data_dictionary['Contract Date'])
@@ -162,6 +190,16 @@ class BillView:
                 self.attendencePath_entry.delete(0, END)
                 self.attendencePath_entry.config(state='readonly')
 
+                self.billYear_entry.delete(0, END)
+                self.billYear_entry.config(values= yearList)
+                self.billYear_entry.current(0)
+
+                self.billMonth_entry.delete(0, END)
+                self.billMonth_entry.config(values=[1,2,3,4,5,6,7,8,9,10,11,12])
+                self.billMonth_entry.current(0)
+
+
+
     def upload_attendence(self):
         try:
             self.filePath = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx;*.xls")])
@@ -176,15 +214,47 @@ class BillView:
 
     def next_operation(self):
         if (
-            self.vendor.get() and self.po.get() and self.selectedStation.get() and self.contractStart.get() and self.operator_name.get() and self.gst.get() and self.pan.get() and self.attendencePath.get()):
+            self.vendor.get() and self.po.get() and self.selectedStation.get() and self.contractStart.get() and self.operator_name.get() and self.gst.get() and self.pan.get() and self.attendencePath.get() and self.billYear.get() and self.billMonth.get()):
             # All fields are filled, perform the add mandays operation
-            self.perform_bill_operation()
+            self.get_active_mandays()
+            self.perform_wage_operation()
         else:
             # Display an error message if any field is empty
             messagebox.showerror("Error", "Please fill in all the fields.")
 
-    def perform_bill_operation(self):
-        pass
+    def back_operation(self):
+        win = Toplevel()
+        dashboard.Dashboard(win)
+        self.window.withdraw()
+        win.deiconify()
+
+    def get_active_mandays(self):
+        
+        activeMandaysDF = pd.read_excel(str(self.attendencePath.get()), header=2)
+        activeMandaysDF = activeMandaysDF.iloc[:, 1:]
+        activeMandaysDF = activeMandaysDF.dropna(axis=0, subset=['Name of Employee', "Father's Name", 'Designation']).reset_index(drop=True)
+
+        col = list(activeMandaysDF.columns)[2:]
+        activeMandaysDF_attendance = pd.DataFrame(columns=col)
+
+        for i in activeMandaysDF.Designation.unique():
+            tempList = [i] + [activeMandaysDF.loc[activeMandaysDF['Designation'] == i, j].sum() for j in col[1:]]
+            activeMandaysDF_attendance = pd.concat([activeMandaysDF_attendance, pd.DataFrame([tempList], columns=col)], ignore_index=True)
+
+        savePath = util.save_mandays('Active', str(self.billYear.get()), str(self.billMonth.get()), str(self.vendor.get()), str(self.selectedStation.get()))
+        activeMandaysDF_attendance.to_excel(savePath, index=False)
+
+    def perform_wage_operation(self):
+        win = Toplevel()
+        wageView.WageView(win)
+        self.window.withdraw()
+        win.deiconify()
+
+
+
+
+
+        
 
 
         

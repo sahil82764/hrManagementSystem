@@ -225,7 +225,7 @@ class AddMandays:
             activeSheet['G4'] = self.dsm_nh.get()
 
             #saving the modified workbook
-            savePath = util.save_mandays_claimed(str(self.year.get()), str(self.month.get()), self.vName.get(), str(self.sName.get()))
+            savePath = util.save_mandays('Claimed', str(self.year.get()), str(self.month.get()), self.vName.get(), str(self.sName.get()))
             customMandays.save(savePath)
 
             win = Toplevel()

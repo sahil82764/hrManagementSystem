@@ -10,7 +10,7 @@ def create_or_open_folder(fPath):
 def get_custom_mandays():
     return 'customTemplate\\mandaysClaimed\\customTemplateMandays.xlsx'
 
-def save_mandays_claimed(year, month, vName, sName):
-    claimedfolder = f'Mandays\Claimed\{year}\{month}'
-    claimedPath = create_or_open_folder(claimedfolder)
-    return f'{claimedPath}\{vName} - {sName}.xlsx'
+def save_mandays(type, year, month, vName, sName):
+    typefolder = f'Mandays\{type}\{year}\{month}'
+    typePath = create_or_open_folder(typefolder)
+    return f'{typePath}\{vName} - {sName}.xlsx'
