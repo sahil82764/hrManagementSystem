@@ -3,11 +3,9 @@ from tkinter import ttk
 # from PIL import ImageTk, Image
 from tkinter import messagebox
 from tkinter import filedialog
-import datetime
-import dashboard
-import database
+import generateBill
 import pandas as pd
-from util import util
+import pandas as pd
 
 class WageView:
     def __init__(self, window, billPath, current_month_claimed_mandays, last_month_claimed_mandays, current_month_active_mandays):
@@ -95,7 +93,20 @@ class WageView:
             print(e)
 
     def generate_bill(self):
-        pass
+        
+        current_month_claimed_mandays_df = pd.read_excel(self.current_month_claimed_mandays)
+
+        last_month_claimed_mandays_df = pd.read_excel(self.last_month_claimed_mandays)
+
+        current_month_active_mandays_df = pd.read_excel(self.current_month_active_mandays)
+
+        wage_rate_df = pd.read_excel(self.filePath)
+
+        generateBill.createBill(self.billPath, current_month_claimed_mandays_df, last_month_claimed_mandays_df, current_month_active_mandays_df, wage_rate_df)
+
+
+
+
 
 
         
