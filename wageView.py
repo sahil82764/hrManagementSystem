@@ -10,7 +10,7 @@ import pandas as pd
 from util import util
 
 class WageView:
-    def __init__(self, window):
+    def __init__(self, window, billPath, current_month_claimed_mandays, last_month_claimed_mandays, current_month_active_mandays):
         self.window = window
         window.geometry("1366x768")
         window.resizable(0, 0)
@@ -30,6 +30,11 @@ class WageView:
                         background="#108cff")
         
         # ============== INPUT VARIABLES =============================
+        self.billPath = billPath
+        self. current_month_claimed_mandays = current_month_claimed_mandays
+        self.last_month_claimed_mandays = last_month_claimed_mandays
+        self.current_month_active_mandays = current_month_active_mandays
+
         self.dsm = StringVar()
         self.dsm_addl = StringVar()
         self.tech = StringVar()
@@ -92,5 +97,7 @@ class WageView:
     def generate_bill(self):
         pass
 
+
+        
 
 

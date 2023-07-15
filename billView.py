@@ -43,8 +43,8 @@ class BillView:
         self.pan = StringVar()
         self.operator = StringVar()
         self.attendencePath = StringVar()
-        self.billYear = StringVar()
-        self.billMonth = StringVar()
+        self.billYear = IntVar()
+        self.billMonth = IntVar()
         
         # ============ VENDOR NAME =================================
         self.vendor_label = Label(self.window, text="Vendor Name:")
@@ -244,8 +244,8 @@ class BillView:
             tempList = [i] + [activeMandaysDF.loc[activeMandaysDF['Designation'] == i, j].sum() for j in col[1:]]
             activeMandaysDF_attendance = pd.concat([activeMandaysDF_attendance, pd.DataFrame([tempList], columns=col)], ignore_index=True)
 
-        savePath = util.save_mandays('Active', str(self.billYear.get()), str(self.billMonth.get()), str(self.vendor.get()), str(self.selectedStation.get()))
-        activeMandaysDF_attendance.to_excel(savePath, index=False)
+        activeMandaysPath = util.save_mandays('Active', str(self.billYear.get()), str(self.billMonth.get()), str(self.vendor.get()), str(self.selectedStation.get()))
+        activeMandaysDF_attendance.to_excel(activeMandaysPath, index=False)
 
     def create_bill_file(self):
         try:
@@ -258,23 +258,36 @@ class BillView:
             activeSheet['B4'] = self.vendor.get()
             activeSheet['B5'] = self.selectedStation.get()
             activeSheet['B6'] = self.contractStart.get()
-            activeSheet['G2'] = f"{calendar.month_abbr[int(self.billMonth.get())]}-{self.billYear.get()}"
+            activeSheet['G2'] = f"{calendar.month_abbr[self.billMonth.get()]}-{self.billYear.get()}"
             activeSheet['G3'] = self.gst.get()
             activeSheet['G4'] = self.pan.get()
             activeSheet['G5'] = self.operator.get()
-            activeSheet['G6'] = f"{calendar.month_abbr[int(self.billMonth.get())]}-{self.billYear.get()}"
+            activeSheet['G6'] = f"{calendar.month_abbr[self.billMonth.get()]}-{self.billYear.get()}"
 
             #saving the modified workbook
-            self.savePath = util.save_bill(str(self.billYear.get()), str(self.billMonth.get()), str(self.vendor.get()), str(self.selectedStation.get()))
-            customBill.save(self.savePath)
+            self.billSavePath = util.save_bill(str(self.billYear.get()), str(self.billMonth.get()), str(self.vendor.get()), str(self.selectedStation.get()))
+            customBill.save(self.billSavePath)
         
         except Exception as e:
             print(e)
     
 
     def perform_wage_operation(self):
+        if self.billMonth.get() == 1:
+            lastMonth = 12
+            lastYear = self.billYear.get() - 1
+
+        else:
+            lastMonth = self.billMonth.get() - 1
+            lastYear = self.billYear
+
+        current_month_claimed_mandays = util.get_mandays('Claimed', self.billYear.get(), self.billMonth.get(), self.vendor.get(), self.selectedStation.get())
+        last_month_claimed_mandays = util.get_mandays('Claimed', lastYear, lastMonth, self.vendor.get(), self.selectedStation.get())
+        current_month_active_mandays = util.get_mandays('Active', self.billYear.get(), self.billMonth.get(), self.vendor.get(), self.selectedStation.get())
+
+        
         win = Toplevel()
-        wageView.WageView(win)
+        wageView.WageView(win, self.billSavePath, current_month_claimed_mandays, last_month_claimed_mandays, current_month_active_mandays)
         self.window.withdraw()
         win.deiconify()
 

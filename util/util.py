@@ -24,3 +24,6 @@ def save_bill(year, month, vName, sName):
     billfolder = f'Bills\{year}\{month}'
     billPath = create_or_open_folder(billfolder)
     return f'{billPath}\{vName} - {sName}.xlsx'
+
+def get_mandays(type, year, month, vName, sName):
+    return f'Mandays\\{type}\\{year}\\{month}\\{vName} - {sName}.xlsx'
