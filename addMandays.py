@@ -196,7 +196,7 @@ class AddMandays:
 
     def perform_save_operation(self):
         try:
-            fPath = util.get_custom_mandays()
+            fPath = util.get_custom_template('Mandays')
             customMandays = load_workbook(fPath)
             activeSheet = customMandays.active
 

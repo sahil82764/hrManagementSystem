@@ -3,12 +3,14 @@ from tkinter import ttk
 # from PIL import ImageTk, Image
 from tkinter import messagebox
 from tkinter import filedialog
+from openpyxl import load_workbook
 import datetime
 import dashboard
 import database
 import pandas as pd
 from util import util
 import wageView
+import calendar
 
 class BillView:
     def __init__(self, window):
@@ -214,10 +216,11 @@ class BillView:
 
     def next_operation(self):
         if (
-            self.vendor.get() and self.po.get() and self.selectedStation.get() and self.contractStart.get() and self.operator_name.get() and self.gst.get() and self.pan.get() and self.attendencePath.get() and self.billYear.get() and self.billMonth.get()):
+            self.vendor.get() and self.po.get() and self.selectedStation.get() and self.contractStart.get() and self.operator.get() and self.gst.get() and self.pan.get() and self.attendencePath.get() and self.billYear.get() and self.billMonth.get()):
             # All fields are filled, perform the add mandays operation
             # self.get_active_mandays()
-            self.perform_wage_operation()
+            self.create_bill_file()
+            # self.perform_wage_operation()
         else:
             # Display an error message if any field is empty
             messagebox.showerror("Error", "Please fill in all the fields.")
@@ -243,6 +246,31 @@ class BillView:
 
         savePath = util.save_mandays('Active', str(self.billYear.get()), str(self.billMonth.get()), str(self.vendor.get()), str(self.selectedStation.get()))
         activeMandaysDF_attendance.to_excel(savePath, index=False)
+
+    def create_bill_file(self):
+        try:
+            billPath = util.get_custom_template('Bill')
+            customBill = load_workbook(billPath)
+            activeSheet = customBill.active
+
+            activeSheet['B2'] = self.po.get()
+            activeSheet['B3'] = self.vendor_code.get()
+            activeSheet['B4'] = self.vendor.get()
+            activeSheet['B5'] = self.selectedStation.get()
+            activeSheet['B6'] = self.contractStart.get()
+            activeSheet['G2'] = f"{calendar.month_abbr[int(self.billMonth.get())]}-{self.billYear.get()}"
+            activeSheet['G3'] = self.gst.get()
+            activeSheet['G4'] = self.pan.get()
+            activeSheet['G5'] = self.operator.get()
+            activeSheet['G6'] = f"{calendar.month_abbr[int(self.billMonth.get())]}-{self.billYear.get()}"
+
+            #saving the modified workbook
+            self.savePath = util.save_bill(str(self.billYear.get()), str(self.billMonth.get()), str(self.vendor.get()), str(self.selectedStation.get()))
+            customBill.save(self.savePath)
+        
+        except Exception as e:
+            print(e)
+    
 
     def perform_wage_operation(self):
         win = Toplevel()
