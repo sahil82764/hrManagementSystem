@@ -86,49 +86,49 @@ def createBill(billPath, current_month_claimed_mandays_df, last_month_claimed_ma
 
     # =============== Current Month Mandays Disbursed cell-D11 ===============
 
-    active_bill_sheet['D12'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'DSM', 'WD'].values[0]
-    active_bill_sheet['D13'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'DSM', 'WD'].values[0]
-    active_bill_sheet['D14'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'TECHINICIAN', 'WD'].values[0]
-    active_bill_sheet['D15'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'TECHINICIAN', 'WD'].values[0]
-    active_bill_sheet['D16'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'MANAGER', 'WD'].values[0]
-    active_bill_sheet['D17'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'MANAGER', 'WD'].values[0]
+    active_bill_sheet['D12'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'DSM', 'WD'].values[0]
+    active_bill_sheet['D13'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'DSM', 'WD'].values[0]
+    active_bill_sheet['D14'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'TECH', 'WD'].values[0]
+    active_bill_sheet['D15'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'TECH', 'WD'].values[0]
+    active_bill_sheet['D16'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'MGR', 'WD'].values[0]
+    active_bill_sheet['D17'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'MGR', 'WD'].values[0]
 
-    active_bill_sheet['D18'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'DSM', 'FH'].values[0]
-    active_bill_sheet['D19'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'DSM', 'FH'].values[0]
-    active_bill_sheet['D20'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'TECHINICIAN', 'FH'].values[0]
-    active_bill_sheet['D21'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'TECHINICIAN', 'FH'].values[0]
-    active_bill_sheet['D22'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'MANAGER', 'FH'].values[0]
-    active_bill_sheet['D23'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'MANAGER', 'FH'].values[0]
+    active_bill_sheet['D18'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'DSM', 'FH'].values[0]
+    active_bill_sheet['D19'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'DSM', 'FH'].values[0]
+    active_bill_sheet['D20'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'TECH', 'FH'].values[0]
+    active_bill_sheet['D21'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'TECH', 'FH'].values[0]
+    active_bill_sheet['D22'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'MGR', 'FH'].values[0]
+    active_bill_sheet['D23'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'MGR', 'FH'].values[0]
 
-    active_bill_sheet['D24'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'DSM', 'NH'].values[0]
-    active_bill_sheet['D25'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'DSM', 'NH'].values[0]
-    active_bill_sheet['D26'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'TECHINICIAN', 'NH'].values[0]
-    active_bill_sheet['D27'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'TECHINICIAN', 'NH'].values[0]
-    active_bill_sheet['D28'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'MANAGER', 'NH'].values[0]
-    active_bill_sheet['D29'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'MANAGER', 'NH'].values[0]
+    active_bill_sheet['D24'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'DSM', 'NH'].values[0]
+    active_bill_sheet['D25'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'DSM', 'NH'].values[0]
+    active_bill_sheet['D26'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'TECH', 'NH'].values[0]
+    active_bill_sheet['D27'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'TECH', 'NH'].values[0]
+    active_bill_sheet['D28'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'MGR', 'NH'].values[0]
+    active_bill_sheet['D29'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'MGR', 'NH'].values[0]
 
-    active_bill_sheet['D30'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'DSM', 'CL'].values[0]
-    active_bill_sheet['D31'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'DSM', 'CL'].values[0]
-    active_bill_sheet['D32'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'TECHINICIAN', 'CL'].values[0]
-    active_bill_sheet['D33'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'TECHINICIAN', 'CL'].values[0]
-    active_bill_sheet['D34'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'MANAGER', 'CL'].values[0]
-    active_bill_sheet['D35'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'MANAGER', 'CL'].values[0]
+    active_bill_sheet['D30'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'DSM', 'CL'].values[0]
+    active_bill_sheet['D31'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'DSM', 'CL'].values[0]
+    active_bill_sheet['D32'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'TECH', 'CL'].values[0]
+    active_bill_sheet['D33'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'TECH', 'CL'].values[0]
+    active_bill_sheet['D34'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'MGR', 'CL'].values[0]
+    active_bill_sheet['D35'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'MGR', 'CL'].values[0]
 
-    active_bill_sheet['D36'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'DSM', 'FT'].values[0]
-    active_bill_sheet['D37'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'DSM', 'FT'].values[0]
-    active_bill_sheet['D38'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'TECHINICIAN', 'FT'].values[0]
-    active_bill_sheet['D39'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'TECHINICIAN', 'FT'].values[0]
-    active_bill_sheet['D40'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'MANAGER', 'FT'].values[0]
-    active_bill_sheet['D41'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'MANAGER', 'FT'].values[0]
+    active_bill_sheet['D36'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'DSM', 'FT'].values[0]
+    active_bill_sheet['D37'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'DSM', 'FT'].values[0]
+    active_bill_sheet['D38'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'TECH', 'FT'].values[0]
+    active_bill_sheet['D39'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'TECH', 'FT'].values[0]
+    active_bill_sheet['D40'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'MGR', 'FT'].values[0]
+    active_bill_sheet['D41'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'MGR', 'FT'].values[0]
 
     # =============== Current Month Week OFF cell-E11 ===============
 
-    active_bill_sheet['E12'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'DSM', 'OFF'].values[0]
-    active_bill_sheet['E13'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'DSM', 'OFF'].values[0]
-    active_bill_sheet['E14'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'TECHINICIAN', 'OFF'].values[0]
-    active_bill_sheet['E15'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'TECHINICIAN', 'OFF'].values[0]
-    active_bill_sheet['E16'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'MANAGER', 'OFF'].values[0]
-    active_bill_sheet['E17'] = current_month_active_mandays_df.loc[current_month_claimed_mandays_df['Designation'] == 'MANAGER', 'OFF'].values[0]
+    active_bill_sheet['E12'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'DSM', 'OFF'].values[0]
+    active_bill_sheet['E13'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'DSM', 'OFF'].values[0]
+    active_bill_sheet['E14'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'TECH', 'OFF'].values[0]
+    active_bill_sheet['E15'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'TECH', 'OFF'].values[0]
+    active_bill_sheet['E16'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'MGR', 'OFF'].values[0]
+    active_bill_sheet['E17'] = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'MGR', 'OFF'].values[0]
 
     # =============== Last Month Reconciliation cell-F11  ===============
 
@@ -136,12 +136,18 @@ def createBill(billPath, current_month_claimed_mandays_df, last_month_claimed_ma
         c_cell = f'C{row}'
         d_cell = f'D{row}'
         f_cell = f'F{row}'
+        e_cell = f'E{row}'
         
         d_value = active_bill_sheet[d_cell].value
         c_value = active_bill_sheet[c_cell].value
-        
-        if d_value is not None and c_value is not None:
-            active_bill_sheet[f_cell].value = d_value - c_value
+        e_value = active_bill_sheet[e_cell].value
+
+        if row>13 and row<=17:        
+            if d_value is not None and c_value is not None:
+                active_bill_sheet[f_cell].value = d_value + e_value - c_value
+        else:
+            if d_value is not None and c_value is not None:
+                active_bill_sheet[f_cell].value = d_value - c_value
 
     # =============== Last Month Amount cell-G11  ===============
 
