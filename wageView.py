@@ -5,10 +5,11 @@ from tkinter import messagebox
 from tkinter import filedialog
 import generateBill
 import pandas as pd
-import pandas as pd
+import dashboard
+
 
 class WageView:
-    def __init__(self, window, billPath, current_month_claimed_mandays, last_month_claimed_mandays, current_month_active_mandays):
+    def __init__(self, window, billPath, current_month_claimed_mandays, last_month_claimed_mandays, current_month_active_mandays, lastMonth, billMonth, lastYear, billYear):
         self.window = window
         window.geometry("1366x768")
         window.resizable(0, 0)
@@ -32,6 +33,10 @@ class WageView:
         self. current_month_claimed_mandays = current_month_claimed_mandays
         self.last_month_claimed_mandays = last_month_claimed_mandays
         self.current_month_active_mandays = current_month_active_mandays
+        self.lastMonth = lastMonth
+        self.billMonth = billMonth
+        self.lastYear = lastYear
+        self.billYear = billYear
 
         self.dsm = StringVar()
         self.dsm_addl = StringVar()
@@ -102,7 +107,12 @@ class WageView:
 
         wage_rate_df = pd.read_excel(self.filePath)
 
-        generateBill.createBill(self.billPath, current_month_claimed_mandays_df, last_month_claimed_mandays_df, current_month_active_mandays_df, wage_rate_df)
+        generateBill.createBill(self.billPath, current_month_claimed_mandays_df, last_month_claimed_mandays_df, current_month_active_mandays_df, wage_rate_df, self.lastMonth, self.billMonth, self.lastYear, self.billYear)
+
+        win = Toplevel()
+        dashboard.Dashboard(win)
+        self.window.withdraw()
+        win.deiconify()
 
 
 

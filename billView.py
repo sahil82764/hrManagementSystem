@@ -218,9 +218,9 @@ class BillView:
         if (
             self.vendor.get() and self.po.get() and self.selectedStation.get() and self.contractStart.get() and self.operator.get() and self.gst.get() and self.pan.get() and self.attendencePath.get() and self.billYear.get() and self.billMonth.get()):
             # All fields are filled, perform the add mandays operation
-            # self.get_active_mandays()
+            self.get_active_mandays()
             self.create_bill_file()
-            # self.perform_wage_operation()
+            self.perform_wage_operation()
         else:
             # Display an error message if any field is empty
             messagebox.showerror("Error", "Please fill in all the fields.")
@@ -279,7 +279,7 @@ class BillView:
 
         else:
             lastMonth = self.billMonth.get() - 1
-            lastYear = self.billYear
+            lastYear = self.billYear.get()
 
         current_month_claimed_mandays = util.get_mandays('Claimed', self.billYear.get(), self.billMonth.get(), self.vendor.get(), self.selectedStation.get())
         last_month_claimed_mandays = util.get_mandays('Claimed', lastYear, lastMonth, self.vendor.get(), self.selectedStation.get())
@@ -287,7 +287,7 @@ class BillView:
 
         
         win = Toplevel()
-        wageView.WageView(win, self.billSavePath, current_month_claimed_mandays, last_month_claimed_mandays, current_month_active_mandays)
+        wageView.WageView(win, self.billSavePath, current_month_claimed_mandays, last_month_claimed_mandays, current_month_active_mandays, lastMonth, self.billMonth.get(), lastYear, self.billYear.get())
         self.window.withdraw()
         win.deiconify()
 
