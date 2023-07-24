@@ -27,3 +27,6 @@ def save_bill(year, month, vName, sName):
 
 def get_mandays(type, year, month, vName, sName):
     return f'Mandays\\{type}\\{year}\\{month}\\{vName} - {sName}.xlsx'
+
+def get_wage_template():
+    return f'customTemplate\\wageRate\\customWageRate.xlsx'

@@ -111,21 +111,21 @@ class BillView:
         self.upload_btn.grid(row=9, column=0, columnspan=2, padx=(50, 10), pady=10)
 
         # Attendence Excel File
-        self.attendencePath_label = Label(window, text="File Path:")
+        self.attendencePath_label = Label(self.window, text="File Path:")
         self.attendencePath_label.grid(row=10, column=0, padx=(50, 10), pady=10)
 
         self.attendencePath_entry = Entry(self.window, textvariable=self.attendencePath)
         self.attendencePath_entry.grid(row=10, column=1, columnspan=4, padx=(50, 10), pady=10, sticky="ew")
 
         # Bill Year
-        self.billYear_label = Label(window, text="YEAR")
+        self.billYear_label = Label(self.window, text="YEAR")
         self.billYear_label.grid(row=11, column=0, padx=(50, 10), pady=10)
 
         self.billYear_entry = ttk.Combobox(self.window, values=[" "], textvariable=self.billYear, state='readonly')
         self.billYear_entry.grid(row=11, column=1, padx=(50, 10), pady=10)
 
         # Bill Month
-        self.billMonth_label = Label(window, text="MONTH")
+        self.billMonth_label = Label(self.window, text="MONTH")
         self.billMonth_label.grid(row=12, column=0, padx=(50, 10), pady=10)
 
         self.billMonth_entry = ttk.Combobox(self.window, values=[" "], textvariable=self.billMonth, state='readonly')
