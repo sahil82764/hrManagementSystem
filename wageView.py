@@ -8,6 +8,7 @@ from openpyxl import load_workbook
 import generateBill
 import pandas as pd
 import dashboard
+import expenseView
 
 
 class WageView:
@@ -39,6 +40,8 @@ class WageView:
         self.billMonth = billMonth
         self.lastYear = lastYear
         self.billYear = billYear
+
+        self.filePath = None
 
         self.wageRateFile = StringVar()
 
@@ -263,13 +266,13 @@ class WageView:
 
         # Create the "Save Entries" button
         self.save_btn = Button(self.window, text="Save Entries", command=lambda: self.saveEntry(), state='disabled')
-        self.save_btn.grid(row=17, column=1, columnspan=2, padx=(50, 10), pady=10, sticky="ew")
+        self.save_btn.grid(row=17, column=2, columnspan=3, padx=(50, 10), pady=10, sticky="ew")
 
         # Create the "Generate Bill" button
-        self.bill_btn = Button(self.window, text="Generate Bill", command=lambda: self.generate_bill())
+        self.bill_btn = Button(self.window, text="NEXT: ENTER EXPENSES / REIMBURSEMENT", command=lambda: self.generate_bill())
         self.bill_btn.grid(row=19, column=1, columnspan=6, padx=(50, 10), pady=10, sticky="ew")
 
-        for i in range(2, 18):
+        for i in range(2, 17):
             self.label = Label(self.window, text=" || ")
             self.label.grid(row=i, column=4, padx=(50, 10), pady=10)
 
@@ -534,12 +537,17 @@ class WageView:
         else:
             wage_rate_df = pd.read_excel(util.get_wage_template())
 
-        generateBill.createBill(self.billPath, current_month_claimed_mandays_df, last_month_claimed_mandays_df, current_month_active_mandays_df, wage_rate_df, self.lastMonth, self.billMonth, self.lastYear, self.billYear)
-
         win = Toplevel()
-        dashboard.Dashboard(win)
+        expenseView.ExpenseView(win, self.billPath, current_month_claimed_mandays_df, last_month_claimed_mandays_df, current_month_active_mandays_df, wage_rate_df, self.lastMonth, self.billMonth, self.lastYear, self.billYear)
         self.window.withdraw()
         win.deiconify()
+
+        # generateBill.createBill(self.billPath, current_month_claimed_mandays_df, last_month_claimed_mandays_df, current_month_active_mandays_df, wage_rate_df, self.lastMonth, self.billMonth, self.lastYear, self.billYear)
+
+        # win = Toplevel()
+        # dashboard.Dashboard(win)
+        # self.window.withdraw()
+        # win.deiconify()
 
 
 
