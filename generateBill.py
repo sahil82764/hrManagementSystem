@@ -1,6 +1,7 @@
 import pandas as pd
 from openpyxl import load_workbook
 import calendar
+from util import util
 
 
 
@@ -150,40 +151,49 @@ def createBill(billPath, current_month_claimed_mandays_df, last_month_claimed_ma
 
     # =============== Last Month Amount cell-G11  ===============
 
-    for row in range(12,42):   
-        f_cell = f'F{row}'
-        b_cell = f'B{row}'
-        g_cell = f'G{row}'
+    # for row in range(12,42):   
+    #     f_cell = f'F{row}'
+    #     b_cell = f'B{row}'
+    #     g_cell = f'G{row}'
             
-        recon_value = active_bill_sheet[f_cell].value
-        filter_value = active_bill_sheet['B10'].value
-        particular = active_bill_sheet[b_cell].value
-        wage = wage_rate_df.loc[wage_rate_df[filter_value] == particular, 'Wage_Rate_1'].values[0]
-        days = calendar.monthrange(lastYear, lastMonth)[1]
+    #     recon_value = active_bill_sheet[f_cell].value
+    #     filter_value = active_bill_sheet['B10'].value
+    #     particular = active_bill_sheet[b_cell].value
+    #     wage = wage_rate_df.loc[wage_rate_df[filter_value] == particular, 'Wage_Rate_1'].values[0]
+    #     days = calendar.monthrange(lastYear, lastMonth)[1]
 
-        if (row>17 and row<=29) or (row>35 and row<=41): 
-            active_bill_sheet[g_cell].value = round(( recon_value * wage ) / 26, 0)
-        else:
-            active_bill_sheet[g_cell].value = round(( recon_value * wage ) / days, 0)
+    #     if (row>17 and row<=29) or (row>35 and row<=41): 
+    #         active_bill_sheet[g_cell].value = round(( recon_value * wage ) / 26, 0)
+    #     else:
+    #         active_bill_sheet[g_cell].value = round(( recon_value * wage ) / days, 0)
 
     # =============== Current Month Amount cell-I11  ===============
 
-    for row in range(12,42):   
-        h_cell = f'H{row}'
-        b_cell = f'B{row}'
-        i_cell = f'I{row}'
+    # for row in range(12,42):   
+    #     h_cell = f'H{row}'
+    #     b_cell = f'B{row}'
+    #     i_cell = f'I{row}'
             
-        mandays_value = active_bill_sheet[h_cell].value
-        filter_value = active_bill_sheet['B10'].value
-        particular = active_bill_sheet[b_cell].value
-        wage = wage_rate_df.loc[wage_rate_df[filter_value] == particular, 'Wage_Rate_2'].values[0]
-        days = calendar.monthrange(billYear, billMonth)[1]
+    #     mandays_value = active_bill_sheet[h_cell].value
+    #     filter_value = active_bill_sheet['B10'].value
+    #     particular = active_bill_sheet[b_cell].value
+    #     wage = wage_rate_df.loc[wage_rate_df[filter_value] == particular, 'Wage_Rate_2'].values[0]
+    #     days = calendar.monthrange(billYear, billMonth)[1]
 
-        if (row>17 and row<=29) or (row>35 and row<=41): 
-            active_bill_sheet[i_cell].value = round(( mandays_value * wage ) / 26, 0)
-        else:
-            active_bill_sheet[i_cell].value = round(( mandays_value * wage ) / days, 0)
+    #     if (row>17 and row<=29) or (row>35 and row<=41): 
+    #         active_bill_sheet[i_cell].value = round(( mandays_value * wage ) / 26, 0)
+    #     else:
+    #         active_bill_sheet[i_cell].value = round(( mandays_value * wage ) / days, 0)
 
+    # =============== CELL: M1 and T1  ===============
+    active_bill_sheet['M1'] = calendar.monthrange(billYear, billMonth)[1]
+    active_bill_sheet['T1'] = calendar.monthrange(lastYear, lastMonth)[1]
+
+    active_bill_sheet['M2'] = f"{calendar.month_abbr[billMonth]}-{billYear}"
+    active_bill_sheet['T2'] = f"{calendar.month_abbr[lastMonth]}-{lastYear}"
+
+    active_bill_sheet['M3'], active_bill_sheet['P3'] = util.count_days(billYear, billMonth)
+    active_bill_sheet['T3'], active_bill_sheet['W3'] = util.count_days(lastYear, lastMonth)
 
     # =============== Saving Workbook  ===============
     billWOrkbook.save(billPath)
