@@ -5,9 +5,8 @@ from tkinter import messagebox
 from tkinter import filedialog
 from util import util
 from openpyxl import load_workbook
-import generateBill
+import billView
 import pandas as pd
-import dashboard
 import expenseView
 
 
@@ -44,6 +43,40 @@ class WageView:
         self.filePath = None
 
         self.wageRateFile = StringVar()
+
+        # ==========================================================================
+
+        self.dsm_pm = StringVar()
+        self.tech_pm = StringVar()
+        self.mgr_pm = StringVar()
+        self.dsm_fh_pm = StringVar()
+        self.tech_fh_pm = StringVar()
+        self.mgr_fh_pm = StringVar()
+        self.dsm_nh_pm = StringVar()
+        self.tech_nh_pm = StringVar()
+        self.mgr_nh_pm = StringVar()
+        self.dsm_cl_pm = StringVar()
+        self.tech_cl_pm = StringVar()
+        self.mgr_cl_pm = StringVar()
+        self.dsm_fs_pm = StringVar()
+        self.tech_fs_pm = StringVar()
+        self.mgr_fs_pm = StringVar()
+
+        self.dsm_cm = StringVar()
+        self.tech_cm = StringVar()
+        self.mgr_cm = StringVar()
+        self.dsm_fh_cm = StringVar()
+        self.tech_fh_cm = StringVar()
+        self.mgr_fh_cm = StringVar()
+        self.dsm_nh_cm = StringVar()
+        self.tech_nh_cm = StringVar()
+        self.mgr_nh_cm = StringVar()
+        self.dsm_cl_cm = StringVar()
+        self.tech_cl_cm = StringVar()
+        self.mgr_cl_cm = StringVar()
+        self.dsm_fs_cm = StringVar()
+        self.tech_fs_cm = StringVar()
+        self.mgr_fs_cm = StringVar()
 
         # ==========================================================================
 
@@ -270,7 +303,11 @@ class WageView:
 
         # Create the "Generate Bill" button
         self.bill_btn = Button(self.window, text="NEXT: ENTER EXPENSES / REIMBURSEMENT", command=lambda: self.generate_bill())
-        self.bill_btn.grid(row=19, column=1, columnspan=6, padx=(50, 10), pady=10, sticky="ew")
+        self.bill_btn.grid(row=19, column=1, columnspan=3, padx=(50, 10), pady=10, sticky="ew")
+
+        # Create the "Back" button
+        self.back_btn = Button(self.window, text="BACK", command=lambda: self.back_operation())
+        self.back_btn.grid(row=19, column=4, columnspan=2, padx=(50, 10), pady=10, sticky="ew")
 
         for i in range(2, 17):
             self.label = Label(self.window, text=" || ")
@@ -288,80 +325,49 @@ class WageView:
         self.wageWorkbook = load_workbook(util.get_wage_template())
         self.wage_sheet = self.wageWorkbook.active
 
-        # ============== PREVIOUS MONTH WAGE VARIABLES =============================
-
-        self.dsm_pm = IntVar()
-        self.dsm_pm.set(self.wage_sheet['B2'].value)
-        self.tech_pm = IntVar()
-        self.tech_pm.set(self.wage_sheet['B4'].value)
-        self.mgr_pm = IntVar()
-        self.mgr_pm.set(self.wage_sheet['B6'].value)
+        # ============== PREVIOUS MONTH WAGE VARIABLES =============================        
+        self.dsm_pm.set(self.wage_sheet['B2'].value)        
+        self.tech_pm.set(self.wage_sheet['B4'].value)        
+        self.mgr_pm.set(self.wage_sheet['B6'].value)        
         
-        self.dsm_fh_pm = IntVar()
-        self.dsm_fh_pm.set(self.wage_sheet['B8'].value)
-        self.tech_fh_pm = IntVar()
-        self.tech_fh_pm.set(self.wage_sheet['B10'].value)
-        self.mgr_fh_pm = IntVar()
+        self.dsm_fh_pm.set(self.wage_sheet['B8'].value)        
+        self.tech_fh_pm.set(self.wage_sheet['B10'].value)        
         self.mgr_fh_pm.set(self.wage_sheet['B12'].value)
-
-        self.dsm_nh_pm = IntVar()
-        self.dsm_nh_pm.set(self.wage_sheet['B14'].value)
-        self.tech_nh_pm = IntVar()
-        self.tech_nh_pm.set(self.wage_sheet['B16'].value)
-        self.mgr_nh_pm = IntVar()
-        self.mgr_nh_pm.set(self.wage_sheet['B18'].value)
         
-        self.dsm_cl_pm = IntVar()
-        self.dsm_cl_pm.set(self.wage_sheet['B20'].value)
-        self.tech_cl_pm = IntVar()
-        self.tech_cl_pm.set(self.wage_sheet['B22'].value)
-        self.mgr_cl_pm = IntVar()
+        self.dsm_nh_pm.set(self.wage_sheet['B14'].value)        
+        self.tech_nh_pm.set(self.wage_sheet['B16'].value)        
+        self.mgr_nh_pm.set(self.wage_sheet['B18'].value)        
+        
+        self.dsm_cl_pm.set(self.wage_sheet['B20'].value)        
+        self.tech_cl_pm.set(self.wage_sheet['B22'].value)        
         self.mgr_cl_pm.set(self.wage_sheet['B24'].value)
-
-        self.dsm_fs_pm = IntVar()
-        self.dsm_fs_pm.set(self.wage_sheet['B26'].value)
-        self.tech_fs_pm = IntVar()
-        self.tech_fs_pm.set(self.wage_sheet['B28'].value)    
-        self.mgr_fs_pm = IntVar()
+        
+        self.dsm_fs_pm.set(self.wage_sheet['B26'].value)        
+        self.tech_fs_pm.set(self.wage_sheet['B28'].value)        
         self.mgr_fs_pm.set(self.wage_sheet['B30'].value)
 
-        # ============== CURRENT MONTH WAGE VARIABLES =============================
-
-        self.dsm_cm = IntVar()
-        self.dsm_cm.set(self.wage_sheet['C2'].value)
-        self.tech_cm = IntVar()
-        self.tech_cm.set(self.wage_sheet['C4'].value)
-        self.mgr_cm = IntVar()
-        self.mgr_cm.set(self.wage_sheet['C6'].value)
+        # ============== CURRENT MONTH WAGE VARIABLES =============================        
+        self.dsm_cm.set(self.wage_sheet['C2'].value)        
+        self.tech_cm.set(self.wage_sheet['C4'].value)        
+        self.mgr_cm.set(self.wage_sheet['C6'].value)        
         
-        self.dsm_fh_cm = IntVar()
-        self.dsm_fh_cm.set(self.wage_sheet['C8'].value)
-        self.tech_fh_cm = IntVar()
-        self.tech_fh_cm.set(self.wage_sheet['C10'].value)
-        self.mgr_fh_cm = IntVar()
+        self.dsm_fh_cm.set(self.wage_sheet['C8'].value)        
+        self.tech_fh_cm.set(self.wage_sheet['C10'].value)        
         self.mgr_fh_cm.set(self.wage_sheet['C12'].value)
-
-        self.dsm_nh_cm = IntVar()
-        self.dsm_nh_cm.set(self.wage_sheet['C14'].value)
-        self.tech_nh_cm = IntVar()
-        self.tech_nh_cm.set(self.wage_sheet['C16'].value)
-        self.mgr_nh_cm = IntVar()
-        self.mgr_nh_cm.set(self.wage_sheet['C18'].value)
         
-        self.dsm_cl_cm = IntVar()
-        self.dsm_cl_cm.set(self.wage_sheet['C20'].value)
-        self.tech_cl_cm = IntVar()
-        self.tech_cl_cm.set(self.wage_sheet['C22'].value)
-        self.mgr_cl_cm = IntVar()
+        self.dsm_nh_cm.set(self.wage_sheet['C14'].value)        
+        self.tech_nh_cm.set(self.wage_sheet['C16'].value)        
+        self.mgr_nh_cm.set(self.wage_sheet['C18'].value)        
+        
+        self.dsm_cl_cm.set(self.wage_sheet['C20'].value)        
+        self.tech_cl_cm.set(self.wage_sheet['C22'].value)        
         self.mgr_cl_cm.set(self.wage_sheet['C24'].value)
-
-        self.dsm_fs_cm = IntVar()
-        self.dsm_fs_cm.set(self.wage_sheet['C26'].value)
-        self.tech_fs_cm = IntVar()
-        self.tech_fs_cm.set(self.wage_sheet['C28'].value)    
-        self.mgr_fs_cm = IntVar()
+        
+        self.dsm_fs_cm.set(self.wage_sheet['C26'].value)        
+        self.tech_fs_cm.set(self.wage_sheet['C28'].value)        
         self.mgr_fs_cm.set(self.wage_sheet['C30'].value)
 
+        self.wageWorkbook.save(util.get_wage_template())
 
 
     def toggleEntry(self):
@@ -439,37 +445,40 @@ class WageView:
             
         ):
             
-            self.wage_sheet['B2'] = self.dsm_pm.get()
-            self.wage_sheet['B4'] = self.tech_pm.get()
-            self.wage_sheet['B6'] = self.mgr_pm.get()
-            self.wage_sheet['B8'] = self.dsm_fh_pm.get()
-            self.wage_sheet['B10'] = self.tech_fh_pm.get()
-            self.wage_sheet['B12'] = self.mgr_fh_pm.get()
-            self.wage_sheet['B14'] = self.dsm_nh_pm.get()
-            self.wage_sheet['B16'] = self.tech_nh_pm.get()
-            self.wage_sheet['B18'] = self.mgr_nh_pm.get()
-            self.wage_sheet['B20'] = self.dsm_cl_pm.get()
-            self.wage_sheet['B22'] = self.tech_cl_pm.get()
-            self.wage_sheet['B24'] = self.mgr_cl_pm.get()
-            self.wage_sheet['B26'] = self.dsm_fs_pm.get()
-            self.wage_sheet['B28'] = self.tech_fs_pm.get()
-            self.wage_sheet['B30'] = self.mgr_fs_pm.get()
+            self.wageWorkbook = load_workbook(util.get_wage_template())
+            self.wage_sheet = self.wageWorkbook.active
+            
+            self.wage_sheet['B2'] = int(self.dsm_pm.get())
+            self.wage_sheet['B4'] = int(self.tech_pm.get())
+            self.wage_sheet['B6'] = int(self.mgr_pm.get())
+            self.wage_sheet['B8'] = int(self.dsm_fh_pm.get())
+            self.wage_sheet['B10'] = int(self.tech_fh_pm.get())
+            self.wage_sheet['B12'] = int(self.mgr_fh_pm.get())
+            self.wage_sheet['B14'] = int(self.dsm_nh_pm.get())
+            self.wage_sheet['B16'] = int(self.tech_nh_pm.get())
+            self.wage_sheet['B18'] = int(self.mgr_nh_pm.get())
+            self.wage_sheet['B20'] = int(self.dsm_cl_pm.get())
+            self.wage_sheet['B22'] = int(self.tech_cl_pm.get())
+            self.wage_sheet['B24'] = int(self.mgr_cl_pm.get())
+            self.wage_sheet['B26'] = int(self.dsm_fs_pm.get())
+            self.wage_sheet['B28'] = int(self.tech_fs_pm.get())
+            self.wage_sheet['B30'] = int(self.mgr_fs_pm.get())
 
-            self.wage_sheet['C2'] = self.dsm_cm.get()
-            self.wage_sheet['C4'] = self.tech_cm.get()
-            self.wage_sheet['C6'] = self.mgr_cm.get()
-            self.wage_sheet['C8'] = self.dsm_fh_cm.get()
-            self.wage_sheet['C10'] = self.tech_fh_cm.get()
-            self.wage_sheet['C12'] = self.mgr_fh_cm.get()
-            self.wage_sheet['C14'] = self.dsm_nh_cm.get()
-            self.wage_sheet['C16'] = self.tech_nh_cm.get()
-            self.wage_sheet['C18'] = self.mgr_nh_cm.get()
-            self.wage_sheet['C20'] = self.dsm_cl_cm.get()
-            self.wage_sheet['C22'] = self.tech_cl_cm.get()
-            self.wage_sheet['C24'] = self.mgr_cl_cm.get()
-            self.wage_sheet['C26'] = self.dsm_fs_cm.get()
-            self.wage_sheet['C28'] = self.tech_fs_cm.get()
-            self.wage_sheet['C30'] = self.mgr_fs_cm.get()
+            self.wage_sheet['C2'] = int(self.dsm_cm.get())
+            self.wage_sheet['C4'] = int(self.tech_cm.get())
+            self.wage_sheet['C6'] = int(self.mgr_cm.get())
+            self.wage_sheet['C8'] = int(self.dsm_fh_cm.get())
+            self.wage_sheet['C10'] = int(self.tech_fh_cm.get())
+            self.wage_sheet['C12'] = int(self.mgr_fh_cm.get())
+            self.wage_sheet['C14'] = int(self.dsm_nh_cm.get())
+            self.wage_sheet['C16'] = int(self.tech_nh_cm.get())
+            self.wage_sheet['C18'] = int(self.mgr_nh_cm.get())
+            self.wage_sheet['C20'] = int(self.dsm_cl_cm.get())
+            self.wage_sheet['C22'] = int(self.tech_cl_cm.get())
+            self.wage_sheet['C24'] = int(self.mgr_cl_cm.get())
+            self.wage_sheet['C26'] = int(self.dsm_fs_cm.get())
+            self.wage_sheet['C28'] = int(self.tech_fs_cm.get())
+            self.wage_sheet['C30'] = int(self.mgr_fs_cm.get())
 
             self.wageWorkbook.save(util.get_wage_template())
 
@@ -542,12 +551,11 @@ class WageView:
         self.window.withdraw()
         win.deiconify()
 
-        # generateBill.createBill(self.billPath, current_month_claimed_mandays_df, last_month_claimed_mandays_df, current_month_active_mandays_df, wage_rate_df, self.lastMonth, self.billMonth, self.lastYear, self.billYear)
-
-        # win = Toplevel()
-        # dashboard.Dashboard(win)
-        # self.window.withdraw()
-        # win.deiconify()
+    def back_operation(self):
+        win = Toplevel()
+        billView.BillView(win)
+        self.window.withdraw()
+        win.deiconify()
 
 
 

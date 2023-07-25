@@ -1,6 +1,5 @@
 import pandas as pd
 from openpyxl import load_workbook
-from util import util
 import calendar
 
 
@@ -161,7 +160,11 @@ def createBill(billPath, current_month_claimed_mandays_df, last_month_claimed_ma
         particular = active_bill_sheet[b_cell].value
         wage = wage_rate_df.loc[wage_rate_df[filter_value] == particular, 'Wage_Rate_1'].values[0]
         days = calendar.monthrange(lastYear, lastMonth)[1]
-        active_bill_sheet[g_cell].value = round(( recon_value * wage ) / days, 0)
+
+        if (row>17 and row<=29) or (row>35 and row<=41): 
+            active_bill_sheet[g_cell].value = round(( recon_value * wage ) / 26, 0)
+        else:
+            active_bill_sheet[g_cell].value = round(( recon_value * wage ) / days, 0)
 
     # =============== Current Month Amount cell-I11  ===============
 
@@ -175,7 +178,11 @@ def createBill(billPath, current_month_claimed_mandays_df, last_month_claimed_ma
         particular = active_bill_sheet[b_cell].value
         wage = wage_rate_df.loc[wage_rate_df[filter_value] == particular, 'Wage_Rate_2'].values[0]
         days = calendar.monthrange(billYear, billMonth)[1]
-        active_bill_sheet[i_cell].value = round(( mandays_value * wage ) / days, 0)
+
+        if (row>17 and row<=29) or (row>35 and row<=41): 
+            active_bill_sheet[i_cell].value = round(( mandays_value * wage ) / 26, 0)
+        else:
+            active_bill_sheet[i_cell].value = round(( mandays_value * wage ) / days, 0)
 
 
     # =============== Saving Workbook  ===============
