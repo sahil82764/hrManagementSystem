@@ -233,19 +233,29 @@ class BillView:
 
     def get_active_mandays(self):
         
+        all_designations = ['DSM', 'TECH', 'MGR']
         activeMandaysDF = pd.read_excel(str(self.attendencePath.get()), header=2)
         activeMandaysDF = activeMandaysDF.iloc[:, 1:]
         activeMandaysDF = activeMandaysDF.dropna(axis=0, subset=['Name of Employee', "Father's Name", 'Designation']).reset_index(drop=True)
 
         col = list(activeMandaysDF.columns)[2:]
-        activeMandaysDF_attendance = pd.DataFrame(columns=col)
+        activeMandaysDF_attendance = pd.DataFrame(columns=['Designation'] + list(activeMandaysDF.columns)[3:])
+        attendance = activeMandaysDF_attendance.copy()
+        activeMandaysDF_attendance['Designation'] = all_designations
 
         for i in activeMandaysDF.Designation.unique():
             tempList = [i] + [activeMandaysDF.loc[activeMandaysDF['Designation'] == i, j].sum() for j in col[1:]]
-            activeMandaysDF_attendance = pd.concat([activeMandaysDF_attendance, pd.DataFrame([tempList], columns=col)], ignore_index=True)
+            attendance = pd.concat([attendance, pd.DataFrame([tempList], columns=col)], ignore_index=True)
+
+        activeMandaysDF_attendance.set_index('Designation', inplace=True)
+        attendance.set_index('Designation', inplace=True)
+
+        mergedDf = pd.concat([activeMandaysDF_attendance, attendance], axis=0)
+
+        outputDf = mergedDf.groupby(level=0).sum().reset_index()
 
         activeMandaysPath = util.save_mandays('Active', str(self.billYear.get()), str(self.billMonth.get()), str(self.vendor.get()), str(self.selectedStation.get()))
-        activeMandaysDF_attendance.to_excel(activeMandaysPath, index=False)
+        outputDf.to_excel(activeMandaysPath, index=False)
 
     def create_bill_file(self):
         try:
