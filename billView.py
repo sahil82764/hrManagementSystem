@@ -300,16 +300,3 @@ class BillView:
         wageView.WageView(win, self.billSavePath, current_month_claimed_mandays, last_month_claimed_mandays, current_month_active_mandays, lastMonth, self.billMonth.get(), lastYear, self.billYear.get())
         self.window.withdraw()
         win.deiconify()
-
-
-
-
-
-        
-
-
-        
-         
-         
-
-        
