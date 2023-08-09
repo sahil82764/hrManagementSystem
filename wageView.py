@@ -7,7 +7,8 @@ from util import util
 from openpyxl import load_workbook
 import billView
 import pandas as pd
-import expenseView
+import dashboard
+import generateBill
 
 
 class WageView:
@@ -742,127 +743,133 @@ class WageView:
             print(e)
 
     def generate_bill(self):
-        if (
+        try:
+            if (
 
-            self.dsm_pm.get() and
-            self.tech_pm.get() and
-            self.mgr_pm.get() and
-            self.dsm_fh_pm.get() and
-            self.tech_fh_pm.get() and
-            self.mgr_fh_pm.get() and
-            self.dsm_nh_pm.get() and
-            self.tech_nh_pm.get() and
-            self.mgr_nh_pm.get() and
-            self.dsm_cl_pm.get() and
-            self.tech_cl_pm.get() and
-            self.mgr_cl_pm.get() and
-            self.dsm_fs_pm.get() and
-            self.tech_fs_pm.get() and
-            self.mgr_fs_pm.get() and
-            self.dsm_cm.get() and
-            self.tech_cm.get() and
-            self.mgr_cm.get() and
-            self.dsm_fh_cm.get() and
-            self.tech_fh_cm.get() and
-            self.mgr_fh_cm.get() and
-            self.dsm_nh_cm.get() and
-            self.tech_nh_cm.get() and
-            self.mgr_nh_cm.get() and
-            self.dsm_cl_cm.get() and
-            self.tech_cl_cm.get() and
-            self.mgr_cl_cm.get() and
-            self.dsm_fs_cm.get() and
-            self.tech_fs_cm.get() and
-            self.mgr_fs_cm.get()
+                self.dsm_pm.get() and
+                self.tech_pm.get() and
+                self.mgr_pm.get() and
+                self.dsm_fh_pm.get() and
+                self.tech_fh_pm.get() and
+                self.mgr_fh_pm.get() and
+                self.dsm_nh_pm.get() and
+                self.tech_nh_pm.get() and
+                self.mgr_nh_pm.get() and
+                self.dsm_cl_pm.get() and
+                self.tech_cl_pm.get() and
+                self.mgr_cl_pm.get() and
+                self.dsm_fs_pm.get() and
+                self.tech_fs_pm.get() and
+                self.mgr_fs_pm.get() and
+                self.dsm_cm.get() and
+                self.tech_cm.get() and
+                self.mgr_cm.get() and
+                self.dsm_fh_cm.get() and
+                self.tech_fh_cm.get() and
+                self.mgr_fh_cm.get() and
+                self.dsm_nh_cm.get() and
+                self.tech_nh_cm.get() and
+                self.mgr_nh_cm.get() and
+                self.dsm_cl_cm.get() and
+                self.tech_cl_cm.get() and
+                self.mgr_cl_cm.get() and
+                self.dsm_fs_cm.get() and
+                self.tech_fs_cm.get() and
+                self.mgr_fs_cm.get()
+                
+            ):
+
+                self.billWorkbook = load_workbook(self.billPath)
+                self.bill_sheet = self.billWorkbook.active
+                
+                self.bill_sheet['J12'] = int(self.dsm_pm.get())
+                self.bill_sheet['J14'] = int(self.tech_pm.get())
+                self.bill_sheet['J16'] = int(self.mgr_pm.get())
+                self.bill_sheet['J18'] = int(self.dsm_fh_pm.get())
+                self.bill_sheet['J20'] = int(self.tech_fh_pm.get())
+                self.bill_sheet['J22'] = int(self.mgr_fh_pm.get())
+                self.bill_sheet['J24'] = int(self.dsm_nh_pm.get())
+                self.bill_sheet['J26'] = int(self.tech_nh_pm.get())
+                self.bill_sheet['J28'] = int(self.mgr_nh_pm.get())
+                self.bill_sheet['J30'] = int(self.dsm_cl_pm.get())
+                self.bill_sheet['J32'] = int(self.tech_cl_pm.get())
+                self.bill_sheet['J34'] = int(self.mgr_cl_pm.get())
+                self.bill_sheet['J36'] = int(self.dsm_fs_pm.get())
+                self.bill_sheet['J38'] = int(self.tech_fs_pm.get())
+                self.bill_sheet['J40'] = int(self.mgr_fs_pm.get())
+
+                self.bill_sheet['J13'] = int(self.dsm_allw_pm.get())
+                self.bill_sheet['J15'] = int(self.tech_allw_pm.get())
+                self.bill_sheet['J17'] = int(self.mgr_allw_pm.get())
+                self.bill_sheet['J19'] = int(self.dsm_fh_allw_pm.get())
+                self.bill_sheet['J21'] = int(self.tech_fh_allw_pm.get())
+                self.bill_sheet['J23'] = int(self.mgr_fh_allw_pm.get())
+                self.bill_sheet['J25'] = int(self.dsm_nh_allw_pm.get())
+                self.bill_sheet['J27'] = int(self.tech_nh_allw_pm.get())
+                self.bill_sheet['J29'] = int(self.mgr_nh_allw_pm.get())
+                self.bill_sheet['J31'] = int(self.dsm_cl_allw_pm.get())
+                self.bill_sheet['J33'] = int(self.tech_cl_allw_pm.get())
+                self.bill_sheet['J35'] = int(self.mgr_cl_allw_pm.get())
+                self.bill_sheet['J37'] = int(self.dsm_fs_allw_pm.get())
+                self.bill_sheet['J39'] = int(self.tech_fs_allw_pm.get())
+                self.bill_sheet['J41'] = int(self.mgr_fs_allw_pm.get())
+
+                self.bill_sheet['K12'] = int(self.dsm_cm.get())
+                self.bill_sheet['K14'] = int(self.tech_cm.get())
+                self.bill_sheet['K16'] = int(self.mgr_cm.get())
+                self.bill_sheet['K18'] = int(self.dsm_fh_cm.get())
+                self.bill_sheet['K20'] = int(self.tech_fh_cm.get())
+                self.bill_sheet['K22'] = int(self.mgr_fh_cm.get())
+                self.bill_sheet['K24'] = int(self.dsm_nh_cm.get())
+                self.bill_sheet['K26'] = int(self.tech_nh_cm.get())
+                self.bill_sheet['K28'] = int(self.mgr_nh_cm.get())
+                self.bill_sheet['K30'] = int(self.dsm_cl_cm.get())
+                self.bill_sheet['K32'] = int(self.tech_cl_cm.get())
+                self.bill_sheet['K34'] = int(self.mgr_cl_cm.get())
+                self.bill_sheet['K36'] = int(self.dsm_fs_cm.get())
+                self.bill_sheet['K38'] = int(self.tech_fs_cm.get())
+                self.bill_sheet['K40'] = int(self.mgr_fs_cm.get())
+
+                self.bill_sheet['K13'] = int(self.dsm_allw_cm.get())
+                self.bill_sheet['K15'] = int(self.tech_allw_cm.get())
+                self.bill_sheet['K17'] = int(self.mgr_allw_cm.get())
+                self.bill_sheet['K19'] = int(self.dsm_fh_allw_cm.get())
+                self.bill_sheet['K21'] = int(self.tech_fh_allw_cm.get())
+                self.bill_sheet['K23'] = int(self.mgr_fh_allw_cm.get())
+                self.bill_sheet['K25'] = int(self.dsm_nh_allw_cm.get())
+                self.bill_sheet['K27'] = int(self.tech_nh_allw_cm.get())
+                self.bill_sheet['K29'] = int(self.mgr_nh_allw_cm.get())
+                self.bill_sheet['K31'] = int(self.dsm_cl_allw_cm.get())
+                self.bill_sheet['K33'] = int(self.tech_cl_allw_cm.get())
+                self.bill_sheet['K35'] = int(self.mgr_cl_allw_cm.get())
+                self.bill_sheet['K37'] = int(self.dsm_fs_allw_cm.get())
+                self.bill_sheet['K39'] = int(self.tech_fs_allw_cm.get())
+                self.bill_sheet['K41'] = int(self.mgr_fs_allw_cm.get())
+
+                self.billWorkbook.save(self.billPath)
             
-        ):
+                # current_month_claimed_mandays_df = pd.read_excel(self.current_month_claimed_mandays)
+                # last_month_claimed_mandays_df = pd.read_excel(self.last_month_claimed_mandays)
+                current_month_active_mandays_df = pd.read_excel(self.current_month_active_mandays)
 
-            self.billWorkbook = load_workbook(self.billPath)
-            self.bill_sheet = self.billWorkbook.active
-            
-            self.bill_sheet['J12'] = int(self.dsm_pm.get())
-            self.bill_sheet['J14'] = int(self.tech_pm.get())
-            self.bill_sheet['J16'] = int(self.mgr_pm.get())
-            self.bill_sheet['J18'] = int(self.dsm_fh_pm.get())
-            self.bill_sheet['J20'] = int(self.tech_fh_pm.get())
-            self.bill_sheet['J22'] = int(self.mgr_fh_pm.get())
-            self.bill_sheet['J24'] = int(self.dsm_nh_pm.get())
-            self.bill_sheet['J26'] = int(self.tech_nh_pm.get())
-            self.bill_sheet['J28'] = int(self.mgr_nh_pm.get())
-            self.bill_sheet['J30'] = int(self.dsm_cl_pm.get())
-            self.bill_sheet['J32'] = int(self.tech_cl_pm.get())
-            self.bill_sheet['J34'] = int(self.mgr_cl_pm.get())
-            self.bill_sheet['J36'] = int(self.dsm_fs_pm.get())
-            self.bill_sheet['J38'] = int(self.tech_fs_pm.get())
-            self.bill_sheet['J40'] = int(self.mgr_fs_pm.get())
+                if self.filePath is not None:
+                    wage_rate_df = pd.read_excel(self.filePath)
+                else:
+                    wage_rate_df = pd.read_excel(util.get_wage_template()) 
 
-            self.bill_sheet['J13'] = int(self.dsm_allw_pm.get())
-            self.bill_sheet['J15'] = int(self.tech_allw_pm.get())
-            self.bill_sheet['J17'] = int(self.mgr_allw_pm.get())
-            self.bill_sheet['J19'] = int(self.dsm_fh_allw_pm.get())
-            self.bill_sheet['J21'] = int(self.tech_fh_allw_pm.get())
-            self.bill_sheet['J23'] = int(self.mgr_fh_allw_pm.get())
-            self.bill_sheet['J25'] = int(self.dsm_nh_allw_pm.get())
-            self.bill_sheet['J27'] = int(self.tech_nh_allw_pm.get())
-            self.bill_sheet['J29'] = int(self.mgr_nh_allw_pm.get())
-            self.bill_sheet['J31'] = int(self.dsm_cl_allw_pm.get())
-            self.bill_sheet['J33'] = int(self.tech_cl_allw_pm.get())
-            self.bill_sheet['J35'] = int(self.mgr_cl_allw_pm.get())
-            self.bill_sheet['J37'] = int(self.dsm_fs_allw_pm.get())
-            self.bill_sheet['J39'] = int(self.tech_fs_allw_pm.get())
-            self.bill_sheet['J41'] = int(self.mgr_fs_allw_pm.get())
+                generateBill.createBill(self.billPath, self.current_month_claimed_mandays, self.last_month_claimed_mandays, current_month_active_mandays_df, wage_rate_df, self.lastMonth, self.billMonth, self.lastYear, self.billYear)           
 
-            self.bill_sheet['K12'] = int(self.dsm_cm.get())
-            self.bill_sheet['K14'] = int(self.tech_cm.get())
-            self.bill_sheet['K16'] = int(self.mgr_cm.get())
-            self.bill_sheet['K18'] = int(self.dsm_fh_cm.get())
-            self.bill_sheet['K20'] = int(self.tech_fh_cm.get())
-            self.bill_sheet['K22'] = int(self.mgr_fh_cm.get())
-            self.bill_sheet['K24'] = int(self.dsm_nh_cm.get())
-            self.bill_sheet['K26'] = int(self.tech_nh_cm.get())
-            self.bill_sheet['K28'] = int(self.mgr_nh_cm.get())
-            self.bill_sheet['K30'] = int(self.dsm_cl_cm.get())
-            self.bill_sheet['K32'] = int(self.tech_cl_cm.get())
-            self.bill_sheet['K34'] = int(self.mgr_cl_cm.get())
-            self.bill_sheet['K36'] = int(self.dsm_fs_cm.get())
-            self.bill_sheet['K38'] = int(self.tech_fs_cm.get())
-            self.bill_sheet['K40'] = int(self.mgr_fs_cm.get())
+                win = Toplevel()
+                dashboard.Dashboard(win)
+                self.window.withdraw()
+                win.deiconify()
 
-            self.bill_sheet['K13'] = int(self.dsm_allw_cm.get())
-            self.bill_sheet['K15'] = int(self.tech_allw_cm.get())
-            self.bill_sheet['K17'] = int(self.mgr_allw_cm.get())
-            self.bill_sheet['K19'] = int(self.dsm_fh_allw_cm.get())
-            self.bill_sheet['K21'] = int(self.tech_fh_allw_cm.get())
-            self.bill_sheet['K23'] = int(self.mgr_fh_allw_cm.get())
-            self.bill_sheet['K25'] = int(self.dsm_nh_allw_cm.get())
-            self.bill_sheet['K27'] = int(self.tech_nh_allw_cm.get())
-            self.bill_sheet['K29'] = int(self.mgr_nh_allw_cm.get())
-            self.bill_sheet['K31'] = int(self.dsm_cl_allw_cm.get())
-            self.bill_sheet['K33'] = int(self.tech_cl_allw_cm.get())
-            self.bill_sheet['K35'] = int(self.mgr_cl_allw_cm.get())
-            self.bill_sheet['K37'] = int(self.dsm_fs_allw_cm.get())
-            self.bill_sheet['K39'] = int(self.tech_fs_allw_cm.get())
-            self.bill_sheet['K41'] = int(self.mgr_fs_allw_cm.get())
-
-            self.billWorkbook.save(self.billPath)
-        
-            current_month_claimed_mandays_df = pd.read_excel(self.current_month_claimed_mandays)
-            last_month_claimed_mandays_df = pd.read_excel(self.last_month_claimed_mandays)
-            current_month_active_mandays_df = pd.read_excel(self.current_month_active_mandays)
-
-            if self.filePath is not None:
-                wage_rate_df = pd.read_excel(self.filePath)
             else:
-                wage_rate_df = pd.read_excel(util.get_wage_template())            
-
-            win = Toplevel()
-            expenseView.ExpenseView(win, self.billPath, current_month_claimed_mandays_df, last_month_claimed_mandays_df, current_month_active_mandays_df, wage_rate_df, self.lastMonth, self.billMonth, self.lastYear, self.billYear)
-            self.window.withdraw()
-            win.deiconify()
-
-        else:
-            # Display an error message if any field is empty
-            messagebox.showerror("Error", "Please fill in all the fields.")
+                # Display an error message if any field is empty
+                messagebox.showerror("Error", "Please fill in all the fields.")
+                
+        except Exception as e:
+            print(e)
 
     def back_operation(self):
         win = Toplevel()

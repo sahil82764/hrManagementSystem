@@ -11,6 +11,7 @@ import pandas as pd
 from util import util
 import wageView
 import calendar
+import shutil
 
 class BillView:
     def __init__(self, window):
@@ -43,6 +44,7 @@ class BillView:
         self.pan = StringVar()
         self.operator = StringVar()
         self.attendencePath = StringVar()
+        self.estimatePath = StringVar()
         self.billYear = IntVar()
         self.billMonth = IntVar()
         
@@ -65,7 +67,7 @@ class BillView:
         self.po_no.grid(row=2, column=1, padx=(50, 10), pady=10)
 
         # Vendor Code
-        self.vendor_code_label = Label(self.window, text="PO No.:")
+        self.vendor_code_label = Label(self.window, text="Vendor Code")
         self.vendor_code_label.grid(row=3, column=0, padx=(50, 10), pady=10)
 
         self.vendor_code = Entry(self.window, textvariable=self.vendorCode)
@@ -106,16 +108,25 @@ class BillView:
         self.pan_no = Entry(self.window, textvariable=self.pan)
         self.pan_no.grid(row=8, column=1, padx=(50, 10), pady=10)
 
-        # Upload Button
-        self.upload_btn = Button(self.window, text="Upload Attendence", command=lambda: self.upload_attendence())
-        self.upload_btn.grid(row=9, column=0, columnspan=2, padx=(50, 10), pady=10)
+        # SALARY ESTIMATE
+        self.estimate_label = Label(self.window, text="Salary Estimate Path")
+        self.estimate_label.grid(row=9, column=0, padx=(50, 10), pady=10)
 
-        # Attendence Excel File
-        self.attendencePath_label = Label(self.window, text="File Path:")
+        self.estimate_entry = Entry(self.window, textvariable=self.estimatePath)
+        self.estimate_entry.grid(row=9, column=1, padx=(50, 10), pady=10)
+
+        self.upload_estimate_btn = Button(self.window, text="Upload Salary Estimate", command=lambda: self.upload_estimate())
+        self.upload_estimate_btn.grid(row=9, column=2, columnspan=2, padx=(50, 10), pady=10)
+
+        # Attendence File
+        self.attendencePath_label = Label(self.window, text="Attendance Path")
         self.attendencePath_label.grid(row=10, column=0, padx=(50, 10), pady=10)
 
         self.attendencePath_entry = Entry(self.window, textvariable=self.attendencePath)
-        self.attendencePath_entry.grid(row=10, column=1, columnspan=4, padx=(50, 10), pady=10, sticky="ew")
+        self.attendencePath_entry.grid(row=10, column=1, padx=(50, 10), pady=10)
+
+        self.upload_attendance_btn = Button(self.window, text="Upload Attendence", command=lambda: self.upload_attendence())
+        self.upload_attendance_btn.grid(row=10, column=2, columnspan=2, padx=(50, 10), pady=10)
 
         # Bill Year
         self.billYear_label = Label(self.window, text="YEAR")
@@ -192,6 +203,10 @@ class BillView:
                 self.attendencePath_entry.delete(0, END)
                 self.attendencePath_entry.config(state='readonly')
 
+                self.estimate_entry.config(state='normal')
+                self.estimate_entry.delete(0, END)
+                self.estimate_entry.config(state='readonly')
+
                 self.billYear_entry.delete(0, END)
                 self.billYear_entry.config(values= yearList)
                 self.billYear_entry.current(0)
@@ -201,7 +216,17 @@ class BillView:
                 self.billMonth_entry.current(0)
 
 
-
+    def upload_estimate(self):
+        try:
+            self.filePath = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx;*.xls")])
+            self.estimate_entry.config(state='normal')
+            self.estimate_entry.delete(0, END)  # Clear previous path, if any
+            self.estimate_entry.insert(END, self.filePath)  # Display the selected path
+            self.estimate_entry.config(state='readonly')
+        
+        except Exception as e:
+            print(e)
+    
     def upload_attendence(self):
         try:
             self.filePath = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx;*.xls")])
@@ -216,11 +241,23 @@ class BillView:
 
     def next_operation(self):
         if (
-            self.vendor.get() and self.po.get() and self.selectedStation.get() and self.contractStart.get() and self.operator.get() and self.gst.get() and self.pan.get() and self.attendencePath.get() and self.billYear.get() and self.billMonth.get()):
+            self.vendor.get() and 
+            self.po.get() and 
+            self.selectedStation.get() and 
+            self.contractStart.get() and 
+            self.operator.get() and 
+            self.gst.get() and 
+            self.pan.get() and 
+            self.attendencePath.get() and 
+            self.estimatePath.get() and 
+            self.billYear.get() and 
+            self.billMonth.get()):
             # All fields are filled, perform the add mandays operation
+            self.copy_file()
             self.get_active_mandays()
             self.create_bill_file()
             self.perform_wage_operation()
+            
         else:
             # Display an error message if any field is empty
             messagebox.showerror("Error", "Please fill in all the fields.")
@@ -253,6 +290,8 @@ class BillView:
         mergedDf = pd.concat([activeMandaysDF_attendance, attendance], axis=0)
 
         outputDf = mergedDf.groupby(level=0).sum().reset_index()
+        outputDf.columns = ['FT' if col == 'F&S' else col for col in outputDf.columns]
+        outputDf.columns = ['OFF' if col == 'Off' else col for col in outputDf.columns]
 
         activeMandaysPath = util.save_mandays('Active', str(self.billYear.get()), str(self.billMonth.get()), str(self.vendor.get()), str(self.selectedStation.get()))
         outputDf.to_excel(activeMandaysPath, index=False)
@@ -280,6 +319,22 @@ class BillView:
         
         except Exception as e:
             print(e)
+
+    def copy_file(self):
+        try:
+            sourcePath_estimate = self.estimatePath
+            destinationPath_estimate = util.get_estimate_path(self.billYear, self.billMonth, self.vendor.get(), self.selectedStation.get())
+            shutil.copy(sourcePath_estimate, destinationPath_estimate)
+            print(f"File copied successfully from '{sourcePath_estimate}' to '{destinationPath_estimate}'.")
+
+
+            sourcePath_attendance = self.attendencePath
+            destinationPath_attendance = util.get_attendance_path(self.billYear, self.billMonth, self.vendor.get(), self.selectedStation.get())
+            shutil.copy(sourcePath_attendance, destinationPath_attendance)
+            print(f"File copied successfully from '{sourcePath_attendance}' to '{destinationPath_attendance}'.")
+
+        except Exception as e:
+            print(f"An error occurred: {e}")
     
 
     def perform_wage_operation(self):
@@ -291,12 +346,14 @@ class BillView:
             lastMonth = self.billMonth.get() - 1
             lastYear = self.billYear.get()
 
-        current_month_claimed_mandays = util.get_mandays('Claimed', self.billYear.get(), self.billMonth.get(), self.vendor.get(), self.selectedStation.get())
-        last_month_claimed_mandays = util.get_mandays('Claimed', lastYear, lastMonth, self.vendor.get(), self.selectedStation.get())
-        current_month_active_mandays = util.get_mandays('Active', self.billYear.get(), self.billMonth.get(), self.vendor.get(), self.selectedStation.get())
+        current_month_claimed_mandays = util.get_estimate_path(self.billYear.get(), self.billMonth.get(), self.vendor.get(), self.selectedStation.get())
+        last_month_claimed_mandays = util.get_estimate_path(lastYear, lastMonth, self.vendor.get(), self.selectedStation.get())
+        current_month_active_mandays = util.get_mandays(self.billYear.get(), self.billMonth.get(), self.vendor.get(), self.selectedStation.get())
 
-        
         win = Toplevel()
         wageView.WageView(win, self.billSavePath, current_month_claimed_mandays, last_month_claimed_mandays, current_month_active_mandays, lastMonth, self.billMonth.get(), lastYear, self.billYear.get())
         self.window.withdraw()
         win.deiconify()
+
+        
+    

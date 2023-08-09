@@ -26,11 +26,17 @@ def save_bill(year, month, vName, sName):
     billPath = create_or_open_folder(billfolder)
     return f'{billPath}\{vName} - {sName}.xlsx'
 
-def get_mandays(type, year, month, vName, sName):
-    return f'Mandays\\{type}\\{year}\\{month}\\{vName} - {sName}.xlsx'
+def get_mandays(year, month, vName, sName):
+    return f'Mandays\\Active\\{year}\\{month}\\{vName} - {sName}.xlsx'
 
 def get_wage_template():
     return f'customTemplate\\wageRate\\customWageRate.xlsx'
+
+def get_estimate_path(year, month, vName, sName):
+    return f'salaryEstimate\\{year}\\{month}\\{vName} - {sName}.xlsx'
+
+def get_attendance_path(year, month, vName, sName):
+    return f'attendanceRecord\\{year}\\{month}\\{vName} - {sName}.xlsx'
 
 def count_days(year, month):
     weekdays = 0
@@ -56,3 +62,18 @@ def count_days(year, month):
         current_day += datetime.timedelta(days=1)
 
     return weekdays, sundays
+
+def get_spi_claim(nonBusSale, busSale, mandays):
+    spi = (nonBusSale + (busSale/2))/mandays
+    if spi <= 300:
+        return 0
+    elif spi >= 301 and spi <= 350:
+        return 7000
+    elif spi >= 351 and spi <= 400:
+        return 9000
+    elif spi >= 401 and spi <= 450:
+        return 11000
+    elif spi >= 451 and spi <= 500:
+        return 13000
+    else:
+        return 15000
