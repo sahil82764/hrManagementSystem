@@ -53,10 +53,11 @@ class Dashboard:
         winClient.deiconify()
 
     def mandayView(self):
-        winMandays = Toplevel()
-        mandaysView.MandaysView(winMandays)
-        self.window.withdraw()
-        winMandays.deiconify()
+        pass
+        # winMandays = Toplevel()
+        # mandaysView.MandaysView(winMandays)
+        # self.window.withdraw()
+        # winMandays.deiconify()
 
     def billView(self):
         winBill = Toplevel()
