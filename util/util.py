@@ -1,4 +1,4 @@
-import os
+import os, sys
 import datetime
 
 def create_or_open_folder(fPath):
@@ -33,10 +33,28 @@ def get_wage_template():
     return f'customTemplate\\wageRate\\customWageRate.xlsx'
 
 def get_estimate_path(year, month, vName, sName):
-    return f'salaryEstimate\\{year}\\{month}\\{vName} - {sName}.xlsx'
+    try:
+        destination_folder = os.path.dirname(f'salaryEstimate\\{year}\\{month}\\{vName} - {sName}.xlsx')
+        
+        if not os.path.exists(destination_folder):
+            os.makedirs(destination_folder)
+            return f'salaryEstimate\\{year}\\{month}\\{vName} - {sName}.xlsx'
+        else:
+            return f'salaryEstimate\\{year}\\{month}\\{vName} - {sName}.xlsx'
+    except Exception as e:
+            print(f"An error occurred: {e} at line {sys.exc_info()[-1].tb_lineno}")
 
 def get_attendance_path(year, month, vName, sName):
-    return f'attendanceRecord\\{year}\\{month}\\{vName} - {sName}.xlsx'
+    try:
+        destination_folder = os.path.dirname(f'attendanceRecord\\{year}\\{month}\\{vName} - {sName}.xlsx')
+        
+        if not os.path.exists(destination_folder):
+            os.makedirs(destination_folder)
+            return f'attendanceRecord\\{year}\\{month}\\{vName} - {sName}.xlsx'
+        else:
+            return f'attendanceRecord\\{year}\\{month}\\{vName} - {sName}.xlsx'
+    except Exception as e:
+            print(f"An error occurred: {e} at line {sys.exc_info()[-1].tb_lineno}")
 
 def count_days(year, month):
     weekdays = 0
@@ -77,3 +95,23 @@ def get_spi_claim(nonBusSale, busSale, mandays):
         return 13000
     else:
         return 15000
+    
+    # if busSale == 0:
+    #     result = 0
+    # else:
+    #     spi = (nonBusSale + (busSale / 2)) / mandays
+
+    #     if spi <= 300:
+    #         result = 0
+    #     elif 301 <= spi <= 350:
+    #         result = 7000
+    #     elif 351 <= spi <= 400:
+    #         result = 9000
+    #     elif 401 <= spi <= 450:
+    #         result = 11000
+    #     elif 451 <= spi <= 500:
+    #         result = 13000
+    #     else:
+    #         result = 15000
+
+    # print("Result:", result)

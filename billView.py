@@ -12,6 +12,7 @@ from util import util
 import wageView
 import calendar
 import shutil
+import sys, os
 
 class BillView:
     def __init__(self, window):
@@ -112,7 +113,7 @@ class BillView:
         self.estimate_label = Label(self.window, text="Salary Estimate Path")
         self.estimate_label.grid(row=9, column=0, padx=(50, 10), pady=10)
 
-        self.estimate_entry = Entry(self.window, textvariable=self.estimatePath)
+        self.estimate_entry = Entry(self.window, textvariable=self.estimatePath, width=100)
         self.estimate_entry.grid(row=9, column=1, padx=(50, 10), pady=10)
 
         self.upload_estimate_btn = Button(self.window, text="Upload Salary Estimate", command=lambda: self.upload_estimate())
@@ -122,7 +123,7 @@ class BillView:
         self.attendencePath_label = Label(self.window, text="Attendance Path")
         self.attendencePath_label.grid(row=10, column=0, padx=(50, 10), pady=10)
 
-        self.attendencePath_entry = Entry(self.window, textvariable=self.attendencePath)
+        self.attendencePath_entry = Entry(self.window, textvariable=self.attendencePath, width=100)
         self.attendencePath_entry.grid(row=10, column=1, padx=(50, 10), pady=10)
 
         self.upload_attendance_btn = Button(self.window, text="Upload Attendence", command=lambda: self.upload_attendence())
@@ -218,25 +219,25 @@ class BillView:
 
     def upload_estimate(self):
         try:
-            self.filePath = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx;*.xls")])
+            self.filePath1 = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx;*.xls")])
             self.estimate_entry.config(state='normal')
             self.estimate_entry.delete(0, END)  # Clear previous path, if any
-            self.estimate_entry.insert(END, self.filePath)  # Display the selected path
+            self.estimate_entry.insert(END, self.filePath1)  # Display the selected path
             self.estimate_entry.config(state='readonly')
         
         except Exception as e:
-            print(e)
+            print(f"An error occurred: {e} at line {sys.exc_info()[-1].tb_lineno}")
     
     def upload_attendence(self):
         try:
-            self.filePath = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx;*.xls")])
+            self.filePath2 = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx;*.xls")])
             self.attendencePath_entry.config(state='normal')
             self.attendencePath_entry.delete(0, END)  # Clear previous path, if any
-            self.attendencePath_entry.insert(END, self.filePath)  # Display the selected path
+            self.attendencePath_entry.insert(END, self.filePath2)  # Display the selected path
             self.attendencePath_entry.config(state='readonly')
         
         except Exception as e:
-            print(e)
+            print(f"An error occurred: {e} at line {sys.exc_info()[-1].tb_lineno}")
 
 
     def next_operation(self):
@@ -318,23 +319,24 @@ class BillView:
             customBill.save(self.billSavePath)
         
         except Exception as e:
-            print(e)
+            print(f"An error occurred: {e} at line {sys.exc_info()[-1].tb_lineno}")
 
     def copy_file(self):
         try:
-            sourcePath_estimate = self.estimatePath
-            destinationPath_estimate = util.get_estimate_path(self.billYear, self.billMonth, self.vendor.get(), self.selectedStation.get())
+            sourcePath_estimate = self.estimatePath.get()
+            destinationPath_estimate = util.get_estimate_path(self.billYear.get(), self.billMonth.get(), self.vendor.get(), self.selectedStation.get())
             shutil.copy(sourcePath_estimate, destinationPath_estimate)
             print(f"File copied successfully from '{sourcePath_estimate}' to '{destinationPath_estimate}'.")
 
 
-            sourcePath_attendance = self.attendencePath
-            destinationPath_attendance = util.get_attendance_path(self.billYear, self.billMonth, self.vendor.get(), self.selectedStation.get())
+
+            sourcePath_attendance = self.attendencePath.get()
+            destinationPath_attendance = util.get_attendance_path(self.billYear.get(), self.billMonth.get(), self.vendor.get(), self.selectedStation.get())
             shutil.copy(sourcePath_attendance, destinationPath_attendance)
-            print(f"File copied successfully from '{sourcePath_attendance}' to '{destinationPath_attendance}'.")
+            print(f"File copied successfully from '{sourcePath_attendance}' to '{destinationPath_attendance}'.")            
 
         except Exception as e:
-            print(f"An error occurred: {e}")
+            print(f"An error occurred: {e} at line {sys.exc_info()[-1].tb_lineno}")
     
 
     def perform_wage_operation(self):

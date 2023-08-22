@@ -44,7 +44,8 @@ class Dashboard:
         self.billBtn.place(x=37, y=222, width=118, height=45)
 
     def homeView(self):
-        winHome = Toplevel()
+        pass
+        # winHome = Toplevel()
 
     def clientView(self):
         winClient = Toplevel()

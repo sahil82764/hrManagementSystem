@@ -360,15 +360,15 @@ class WageView:
 
         
         # Create the "Change Entries" button
-        self.change_btn = Button(self.window, text="Change Entries", command=lambda: self.toggleEntry())
+        self.change_btn = Button(self.window, text="SAVE ENTRIES", command=lambda: self.toggleEntry())
         self.change_btn.grid(row=32, column=0, columnspan=2, padx=(50, 10), pady=4, sticky="ew")
 
         # # Create the "Save Entries" button
-        self.save_btn = Button(self.window, text="Save Entries", command=lambda: self.saveEntry(), state='disabled')
+        self.save_btn = Button(self.window, text="SAVE ENTRIES", command=lambda: self.saveEntry(), state='disabled')
         self.save_btn.grid(row=32, column=2, columnspan=3, padx=(50, 10), pady=4, sticky="ew")
 
         # # Create the "Generate Bill" button
-        self.bill_btn = Button(self.window, text="NEXT: ENTER EXPENSES / REIMBURSEMENT", command=lambda: self.generate_bill())
+        self.bill_btn = Button(self.window, text="GENERATE BILL", command=lambda: self.generate_bill())
         self.bill_btn.grid(row=33, column=1, columnspan=3, padx=(50, 10), pady=4, sticky="ew")
 
         # # Create the "Back" button
@@ -382,7 +382,7 @@ class WageView:
         self.wageRate_entry = Entry(self.window, textvariable=self.wageRateFile, width=60)
         self.wageRate_entry.grid(row=14, column=5, columnspan=5, padx=(50, 10), sticky="ew")
 
-        self.upload_btn = Button(self.window, text="Upload Wage Rate", command=lambda: self.upload_wage_rate(), width= 50)
+        self.upload_btn = Button(self.window, text="UPLOAD WAGE RATE", command=lambda: self.upload_wage_rate(), width= 50)
         self.upload_btn.grid(row=16, column=5, padx=(50, 10))
 
 
@@ -858,6 +858,8 @@ class WageView:
                     wage_rate_df = pd.read_excel(util.get_wage_template()) 
 
                 generateBill.createBill(self.billPath, self.current_month_claimed_mandays, self.last_month_claimed_mandays, current_month_active_mandays_df, wage_rate_df, self.lastMonth, self.billMonth, self.lastYear, self.billYear)           
+
+                messagebox.showinfo("Success", "Bill Generated successfully")
 
                 win = Toplevel()
                 dashboard.Dashboard(win)

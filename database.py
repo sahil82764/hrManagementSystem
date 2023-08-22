@@ -2,6 +2,10 @@ import pyodbc
 import logging
 
 
+# serverName = 'LAPTOP-NFRNM2TK'
+# databaseName = 'igl_client'
+# driver = '{ODBC Driver 17 for SQL Server}'
+
 serverName = '--'
 databaseName = '--'
 driver = '{ODBC Driver 17 for SQL Server}'
@@ -61,7 +65,7 @@ def get_all():
         dbCursor = databaseConnection.cursor()
         dbCursor.execute("SELECT * FROM vendor")
         result_vendor = dbCursor.fetchall()
-        result = [tuple_without_first[0:] for tuple_without_first in result_vendor]     # remove 1st element of every tuple (monotonically added id)
+        result = [tuple_without_first[1:] for tuple_without_first in result_vendor]     # remove 1st element of every tuple (monotonically added id)
         dbCursor.close()
         databaseConnection.close()
 
