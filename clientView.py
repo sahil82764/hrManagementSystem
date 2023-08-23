@@ -268,9 +268,10 @@ class ClientView:
 
          # Check if the contract date is the placeholder
         if self.contract_date.get() == "yyyy-mm-dd":
-            contract_date = None  # Set contract_date to None
-        else:
-            contract_date = datetime.strptime(self.contract_date.get(), "%Y-%m-%d").date()
+            # contract_date = None  # Set contract_date to None
+            messagebox.showwarning("INVALID RECORD", "Please Enter Correct Date.")
+            self.clear()
+            return
         
         # Update only the selected record
         dbCursor.execute("""UPDATE vendor 
@@ -279,7 +280,7 @@ class ClientView:
                             WHERE id=?""",
                         (
                             self.station_name.get(),
-                            contract_date,
+                            datetime.strptime(self.contract_date.get(), "%Y-%m-%d").date(),
                             int(selected_values[0])  # Use id from the selected row
                         )
                         )
