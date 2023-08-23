@@ -360,7 +360,7 @@ class WageView:
 
         
         # Create the "Change Entries" button
-        self.change_btn = Button(self.window, text="SAVE ENTRIES", command=lambda: self.toggleEntry())
+        self.change_btn = Button(self.window, text="CHANGE ENTRIES", command=lambda: self.toggleEntry())
         self.change_btn.grid(row=32, column=0, columnspan=2, padx=(50, 10), pady=4, sticky="ew")
 
         # # Create the "Save Entries" button

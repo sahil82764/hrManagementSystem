@@ -65,11 +65,10 @@ def get_all():
         dbCursor = databaseConnection.cursor()
         dbCursor.execute("SELECT * FROM vendor")
         result_vendor = dbCursor.fetchall()
-        result = [tuple_without_first[1:] for tuple_without_first in result_vendor]     # remove 1st element of every tuple (monotonically added id)
         dbCursor.close()
         databaseConnection.close()
 
-        return result
+        return result_vendor
 
     except Exception as e:
         print(e)

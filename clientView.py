@@ -6,6 +6,7 @@ from tkinter import messagebox
 import dashboard
 import database
 from datetime import datetime
+import os, sys
 
 class ClientView:
     def __init__(self, window):
@@ -56,7 +57,7 @@ class ClientView:
 
         self.tree.configure(
             columns=(
-                # "ID",
+                "ID",
                 "PO No",
                 "Vendor Code",
                 "Vendor Name",
@@ -68,7 +69,7 @@ class ClientView:
             )
         )
 
-        # self.tree.heading("ID", text="ID", anchor="center")
+        self.tree.heading("ID", text="ID", anchor="center")
         self.tree.heading("PO No", text="PO No", anchor="center")
         self.tree.heading("Vendor Code", text="Vendor Code", anchor="center")
         self.tree.heading("Vendor Name", text="Vendor Name", anchor="center")
@@ -86,21 +87,22 @@ class ClientView:
         self.tree.column("#5", stretch=NO, minwidth=0, width=120)
         self.tree.column("#6", stretch=NO, minwidth=0, width=120)
         self.tree.column("#7", stretch=NO, minwidth=0, width=110)
-        # self.tree.column("#8", stretch=NO, minwidth=0, width=110)
+        self.tree.column("#8", stretch=NO, minwidth=0, width=110)
         self.show_data()
         self.tree.bind("<ButtonRelease-1>", self.client_info)
+        # self.tree.bind("<ButtonRelease-1>", self.reset_entry_fields)
 
         #================= ID ========================================
-        # self.id_label = Label(self.window, text="ID: ", bg="white", fg="#4f4e4d",
-        #                           font=("yu gothic ui", 13, "bold"))
-        # self.id_label.place(x=22, y=220, height=25)
+        self.id_label = Label(self.window, text="ID: ", bg="white", fg="#4f4e4d",
+                                  font=("yu gothic ui", 13, "bold"))
+        self.id_label.place(x=22, y=220, height=25)
 
-        # self.id_entry = Entry(self.window, highlightthickness=0, relief=FLAT, bg="white", fg="#6b6a69",
-        #                           font=("yu gothic ui semibold", 12), textvariable=self.id)
-        # self.id_entry.place(x=190, y=220, width=250)  # trebuchet ms
+        self.id_entry = Entry(self.window, highlightthickness=0, relief=FLAT, bg="white", fg="#6b6a69",
+                                  font=("yu gothic ui semibold", 12), textvariable=self.id, state="readonly")
+        self.id_entry.place(x=190, y=220, width=250)  # trebuchet ms
 
-        # self.id_line = Canvas(self.window, width=250, height=1.5, bg="#bdb9b1", highlightthickness=0)
-        # self.id_line.place(x=190, y=243)
+        self.id_line = Canvas(self.window, width=250, height=1.5, bg="#bdb9b1", highlightthickness=0)
+        self.id_line.place(x=190, y=243)
         
         #================= PO NO ========================================
         self.po_label = Label(self.window, text="PO No: ", bg="white", fg="#4f4e4d",
@@ -209,17 +211,28 @@ class ClientView:
         self.clear_btn = Button(self.window, text="CLEAR", width=10, height=1, cursor="hand2", font=("yu gothic ui", 15, "bold"), command=lambda: self.clear())
         self.clear_btn.place(x=310, y=600)
 
-        self.exit_btn = Button(self.window, text="EXIT", width=20, height=1, cursor="hand2", font=("yu gothic ui", 15, "bold"), command=lambda: self.exit())
-        self.exit_btn.place(x=120, y=670)
+        self.delete_btn = Button(self.window, text="DELETE", width=10, height=1, cursor="hand2", font=("yu gothic ui", 15, "bold"), command=lambda: self.delete())
+        self.delete_btn.place(x=50, y=670)
+
+        self.exit_btn = Button(self.window, text="EXIT", width=22, height=1, cursor="hand2", font=("yu gothic ui", 15, "bold"), command=lambda: self.exit())
+        self.exit_btn.place(x=180, y=670)
 
 
     def clear(self):
-        # self.id.set("")
+        self.id_entry.config(state='normal')
+        self.id.set("")
+        self.id_entry.delete(0, END)
+        self.id_entry.config(state='readonly')        
+        
         self.po_no.set("")
         self.vendor_code.set("")
         self.vendor_name.set("")
         self.station_name.set("")
-        self.contract_date.set("yyyy-mm-dd")
+
+        self.contract_entry.delete(0, END)
+        self.contract_date.set("")
+        self.contract_entry.insert(0, "yyyy-mm-dd")
+
         self.gst_no.set("")
         self.pan_no.set("")
         self.operator_name.set("")
@@ -228,19 +241,22 @@ class ClientView:
         viewInfo = self.tree.focus()
         learner_data = self.tree.item(viewInfo)
         row = learner_data["values"]
-        # self.id.set(row[0])
-        self.po_no.set(row[0])
-        self.vendor_code.set(row[1])
-        self.vendor_name.set(row[2])
-        self.station_name.set(row[3])
-        self.contract_date.set(row[4])
-        self.gst_no.set(row[5])
-        self.pan_no.set(row[6])
-        self.operator_name.set(row[7])
+        self.id.set(row[0])
+        self.po_no.set(row[1])
+        self.vendor_code.set(row[2])
+        self.vendor_name.set(row[3])
+        self.station_name.set(row[4])
+        self.contract_date.set(row[5])
+        self.gst_no.set(row[6])
+        self.pan_no.set(row[7])
+        self.operator_name.set(row[8])
 
     def update(self):
         selected_item = self.tree.focus()  # Get the selected item in the Treeview
         if not selected_item:
+            messagebox.showwarning("No Selection", "Please select a record to update.")
+            return
+        if self.po_no.get() == "":
             messagebox.showwarning("No Selection", "Please select a record to update.")
             return
         
@@ -249,25 +265,21 @@ class ClientView:
         
         # Get the values from the selected item
         selected_values = self.tree.item(selected_item, "values")
+
+         # Check if the contract date is the placeholder
+        if self.contract_date.get() == "yyyy-mm-dd":
+            contract_date = None  # Set contract_date to None
+        else:
+            contract_date = datetime.strptime(self.contract_date.get(), "%Y-%m-%d").date()
         
         # Update only the selected record
         dbCursor.execute("""UPDATE vendor 
-                            SET Vendor_Code=?,
-                                Vendor_Name=?,
-                                Station_Name=?,
+                            SET Station_Name=?,
                                 Contract_Date=?,
-                                GST_No=?,
-                                Pan_No=?,
-                                Operator_Name=?
                             WHERE id=?""",
                         (
-                            int(self.vendor_code.get()),
-                            self.vendor_name.get(),
                             self.station_name.get(),
-                            datetime.strptime(self.contract_date.get(), "%Y-%m-%d").date(),
-                            self.gst_no.get(),
-                            self.pan_no.get(),
-                            self.operator_name.get(),
+                            contract_date,
                             int(selected_values[0])  # Use id from the selected row
                         )
                         )
@@ -283,12 +295,12 @@ class ClientView:
         dbCursor.execute("INSERT INTO vendor VALUES (?,?,?,?,?,?,?,?)",
                          (int(self.po_no.get()),
                           int(self.vendor_code.get()),
-                          self.vendor_name.get(),
-                          self.station_name.get(),
+                          self.vendor_name.get().upper(),
+                          self.station_name.get().upper(),
                           datetime.strptime(self.contract_date.get(), "%Y-%m-%d").date(),
                           self.gst_no.get(),
-                          self.pan_no.get(),
-                          self.operator_name.get()
+                          self.pan_no.get().upper(),
+                          self.operator_name.get().upper()
                           )
                          )
         connection.commit()
@@ -296,20 +308,41 @@ class ClientView:
         self.show_data()
         self.clear()
         messagebox.showinfo("", "New Client Record Added Successfully")   
+
+    def delete(self):
+        try:
+            treeViewContent = self.tree.focus()
+            treeViewItems = self.tree.item(treeViewContent)
+            treeViewValues = treeViewItems["values"][3]
+            ask = messagebox.askyesno("Warning",
+                                      f"Are you sure you want to delete records of {treeViewValues}")
+            
+            if ask is True:
+                connection = database.connectSQL()
+                dbCursor = connection.cursor()
+                dbCursor.execute("""DELETE FROM vendor 
+                                    WHERE id=?""",
+                                (
+                                    int(self.id.get())  # Use id from the selected row
+                                )
+                                )
+                connection.commit()
+                self.show_data()
+                connection.close()
+                self.clear()
+                messagebox.showinfo("Success", f" {treeViewValues} records has been deleted Successfully")
+
+        except Exception as e:
+            print(f"An error occurred: {e} at line {sys.exc_info()[-1].tb_lineno}")
     
 
     def show_data(self):
-        # connection = database.connectSQL()
-        # dbCursor = connection.cursor()
-        # dbCursor.execute("SELECT * FROM vendor")
-        # rows = dbCursor.fetchall()
         rows = database.get_all()
         if len(rows) != 0:
             self.tree.delete(*self.tree.get_children())
             for row in rows:
-                self.tree.insert('', END, values=row)
-        # connection.commit()
-        # connection.close()
+                self.tree.insert('', END, values=(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8]))
+
 
     def exit(self):
         exit_command = messagebox.askyesno("Edit Client Records", "Are you sure you want to exit")
