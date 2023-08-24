@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+from ttkthemes import themed_tk as tk
 # from PIL import ImageTk, Image
 from tkinter import messagebox
 from tkinter import filedialog
@@ -55,7 +56,7 @@ class BillView:
 
         self.vendorNames = database.get_vendors_only()
     
-        self.vendor_combo = ttk.Combobox(self.window, values= self.vendorNames, textvariable=self.vendor, state='readonly')
+        self.vendor_combo = ttk.Combobox(self.window, values= self.vendorNames, textvariable=self.vendor, state='readonly', width=50)
         self.vendor_combo.grid(row=1, column=1, padx=(50, 10), pady=10)
         self.vendor_combo.bind('<<ComboboxSelected>>', self.fetchData)
     
@@ -64,49 +65,49 @@ class BillView:
         self.po_label.grid(row=2, column=0, padx=(50, 10), pady=10)
 
         
-        self.po_no = Entry(self.window, textvariable=self.po)
+        self.po_no = Entry(self.window, textvariable=self.po,width=50)
         self.po_no.grid(row=2, column=1, padx=(50, 10), pady=10)
 
         # Vendor Code
         self.vendor_code_label = Label(self.window, text="Vendor Code")
         self.vendor_code_label.grid(row=3, column=0, padx=(50, 10), pady=10)
 
-        self.vendor_code = Entry(self.window, textvariable=self.vendorCode)
+        self.vendor_code = Entry(self.window, textvariable=self.vendorCode,width=50)
         self.vendor_code.grid(row=3, column=1, padx=(50, 10), pady=10)
 
         # Station Name
         self.station_label = Label(self.window, text="Station Name:")
         self.station_label.grid(row=4, column=0, padx=(50, 10), pady=10)
 
-        self.station_name = ttk.Combobox(self.window, values=[" "], state='readonly', textvariable=self.selectedStation)
+        self.station_name = ttk.Combobox(self.window, values=[" "], state='readonly', textvariable=self.selectedStation,width=50)
         self.station_name.grid(row=4, column=1, padx=(50, 10), pady=10)
 
         # Contract Date
         self.contractStart_label = Label(self.window, text="Contract Start Date:")
         self.contractStart_label.grid(row=5, column=0, padx=(50, 10), pady=10)
 
-        self.contractStart_date = Entry(self.window, textvariable=self.contractStart)
+        self.contractStart_date = Entry(self.window, textvariable=self.contractStart,width=50)
         self.contractStart_date.grid(row=5, column=1, padx=(50, 10), pady=10)
 
         # Operator Name
         self.operator_label = Label(self.window, text="Operator Name:")
         self.operator_label.grid(row=6, column=0, padx=(50, 10), pady=10)
 
-        self.operator_name = Entry(self.window, textvariable=self.operator)
+        self.operator_name = Entry(self.window, textvariable=self.operator,width=50)
         self.operator_name.grid(row=6, column=1, padx=(50, 10), pady=10)
 
         # GST No
         self.gst_label = Label(self.window, text="GST No:")
         self.gst_label.grid(row=7, column=0, padx=(50, 10), pady=10)
 
-        self.gst_no = Entry(self.window, textvariable=self.gst)
+        self.gst_no = Entry(self.window, textvariable=self.gst,width=50)
         self.gst_no.grid(row=7, column=1, padx=(50, 10), pady=10)
 
         # PAN No
         self.pan_label = Label(self.window, text="PAN No:")
         self.pan_label.grid(row=8, column=0, padx=(50, 10), pady=10)
 
-        self.pan_no = Entry(self.window, textvariable=self.pan)
+        self.pan_no = Entry(self.window, textvariable=self.pan,width=50)
         self.pan_no.grid(row=8, column=1, padx=(50, 10), pady=10)
 
         # SALARY ESTIMATE
@@ -144,11 +145,11 @@ class BillView:
         self.billMonth_entry.grid(row=12, column=1, padx=(50, 10), pady=10)
 
         # Next Button
-        self.next_btn = Button(self.window, text="NEXT", command=lambda: self.next_operation())
+        self.next_btn = Button(self.window, text="NEXT", command=lambda: self.next_operation(),width=15)
         self.next_btn.grid(row=13, column=0, columnspan=2, padx=(50, 10), pady=10)
 
         # Back Button
-        self.back_btn = Button(self.window, text="BACK", command=lambda: self.back_operation())
+        self.back_btn = Button(self.window, text="BACK", command=lambda: self.back_operation(),width=15)
         self.back_btn.grid(row=13, column=1, columnspan=2, padx=(50, 10), pady=10)
 
     def fetchData(self, event):
@@ -358,4 +359,13 @@ class BillView:
         win.deiconify()
 
         
-    
+def win():
+    window = tk.ThemedTk()
+    window.get_themes()
+    window.set_theme("arc")
+    BillView(window)
+    window.mainloop()
+
+
+if __name__ == '__main__':
+    win()

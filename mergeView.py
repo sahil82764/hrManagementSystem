@@ -8,6 +8,7 @@ import dashboard
 import database
 from datetime import datetime
 import os, sys
+from util import util
 
 class MergeView:
     def __init__(self, window):
@@ -34,7 +35,7 @@ class MergeView:
         self.create_segment("BILL 2:", 398, self.bill2)
         self.create_segment("BILL 3:", 478, self.bill3)
 
-        self.gen_btn = Button(self.window, text="GENERATE BILL", width=15, height=1, cursor="hand2", font=("yu gothic ui", 20, "bold"), command=self.generate)
+        self.gen_btn = Button(self.window, text="GENERATE BILL", width=15, height=1, cursor="hand2", font=("yu gothic ui", 20, "bold"), command=lambda: self.generate())
         self.gen_btn.place(x=600, y=600)
 
     def create_segment(self, label_text, y_offset, bill_variable):
@@ -56,8 +57,14 @@ class MergeView:
             print(f"An error occurred: {e} at line {sys.exc_info()[-1].tb_lineno}")
 
     def generate(self):
-        pass
-
+         if (self.bill1.get() and self.bill2.get()):
+             util.mergeBill2(self.bill1.get(), self.bill2.get())
+         elif (self.bill1.get() and self.bill3.get()):
+             util.mergeBill2(self.bill1.get(), self.bill3.get())
+         elif (self.bill2.get() and self.bill3.get()):
+             util.mergeBill2(self.bill2.get(), self.bill3.get())
+         else:
+             messagebox.showerror("Error", "Please fill in all the fields.")
 
         #     # Keep track of the number of segments added
         #     self.segment_count = 0

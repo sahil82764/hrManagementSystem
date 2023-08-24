@@ -1,4 +1,3 @@
-import pandas as pd
 from openpyxl import load_workbook
 import calendar
 from util import util
@@ -222,7 +221,8 @@ def createBill(billPath, current_month_claimed_mandays, last_month_claimed_manda
     mandays = current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'DSM', 'WD'].values[0] + current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'TECH', 'WD'].values[0] + current_month_active_mandays_df.loc[current_month_active_mandays_df['Designation'] == 'MGR', 'WD'].values[0]
     
     active_bill_sheet['H63'] = 0
-    active_bill_sheet['H64'] = util.get_spi_claim(nonBusSale, busSale, mandays)
+    selectedStation = active_bill_sheet['B5'].value
+    active_bill_sheet['H64'] = util.get_spi_claim(nonBusSale, busSale, mandays, selectedStation)
 
     # =============== MANPOWER DEPLOYED CELLS =============================
     active_bill_sheet['F8'] = current_month_estimate_sheet['I22'].value
