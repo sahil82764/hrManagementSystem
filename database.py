@@ -1,10 +1,6 @@
 import pyodbc
 import logging
 
-# serverName = 'LAPTOP-NFRNM2TK'
-# databaseName = 'igl_client'
-# driver = '{ODBC Driver 17 for SQL Server}'
-
 serverName = '--'
 databaseName = '--'
 driver = '{ODBC Driver 17 for SQL Server}'
