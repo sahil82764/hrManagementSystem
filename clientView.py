@@ -6,7 +6,7 @@ from tkinter import messagebox
 import dashboard
 import database
 from datetime import datetime
-import os, sys
+import sys
 
 class ClientView:
     def __init__(self, window):

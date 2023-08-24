@@ -29,10 +29,10 @@ class BillView:
                              relief=FLAT)
         self.heading.grid(row=0, column=0, columnspan=3)
 
-        style = ttk.Style()
-        style.theme_use("clam")
-        style.configure("Treeview.Heading", font=('yu gothic ui', 10, "bold"), foreground="black",
-                        background="#108cff")
+        # style = ttk.Style()
+        # style.theme_use("clam")
+        # style.configure("Treeview.Heading", font=('yu gothic ui', 10, "bold"), foreground="black",
+        #                 background="#108cff")
 
         # ============ INPUT VARIABLES =============================
         self.vendor = StringVar()

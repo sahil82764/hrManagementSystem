@@ -4,6 +4,7 @@ from tkinter import messagebox
 import mandaysView
 import clientView
 import billView
+import mergeView
 
 
 class Dashboard:
@@ -25,23 +26,27 @@ class Dashboard:
         #====================== BUTTONS =================
         # HOME
         self.homeBtn = Button(self.window, text="HOME", cursor='hand2', font=('Arial',13, 'bold'), fg="white", bg='#9a258f', activebackground='white', command=lambda: self.homeView())
-        self.homeBtn.place(x=37, y=112, width=118, height=45)
+        self.homeBtn.place(x=37, y=112, width=150, height=45)
 
         # EXIT
         self.exitBtn = Button(self.window, text="EXIT", cursor='hand2', font=('Arial',13, 'bold'), fg="white", bg='#9a258f', activebackground='white', command=self.exitCommand)
-        self.exitBtn.place(x=37, y=328, width=118, height=45)
+        self.exitBtn.place(x=37, y=328, width=150, height=45)
 
         # CLIENT
         self.clientBtn = Button(self.window, text="CLIENTS", cursor='hand2', font=('Arial',13, 'bold'), fg="white", bg='#9a258f', activebackground='white', command=lambda: self.clientView())
-        self.clientBtn.place(x=37, y=276, width=118, height=45)
+        self.clientBtn.place(x=37, y=276, width=150, height=45)
+
+        # # MANDAYS
+        # self.mandayBtn = Button(self.window, text="MANDAYS", cursor='hand2', font=('Arial',13, 'bold'), fg="white", bg='#9a258f', activebackground='white', command=lambda: self.mandayView())
+        # self.mandayBtn.place(x=37, y=167, width=118, height=45)
 
         # MANDAYS
-        self.mandayBtn = Button(self.window, text="MANDAYS", cursor='hand2', font=('Arial',13, 'bold'), fg="white", bg='#9a258f', activebackground='white', command=lambda: self.mandayView())
-        self.mandayBtn.place(x=37, y=167, width=118, height=45)
+        self.mergeBtn = Button(self.window, text="COMBINE BILLS", cursor='hand2', font=('Arial',13, 'bold'), fg="white", bg='#9a258f', activebackground='white', command=lambda: self.mergeView())
+        self.mergeBtn.place(x=37, y=167, width=150, height=45)
 
         # BILL
         self.billBtn = Button(self.window, text="BILL", cursor='hand2', font=('Arial',13, 'bold'), fg="white", bg='#9a258f', activebackground='white', command=lambda: self.billView())
-        self.billBtn.place(x=37, y=222, width=118, height=45)
+        self.billBtn.place(x=37, y=222, width=150, height=45)
 
     def homeView(self):
         pass
@@ -53,12 +58,19 @@ class Dashboard:
         self.window.withdraw()
         winClient.deiconify()
 
-    def mandayView(self):
-        pass
-        # winMandays = Toplevel()
-        # mandaysView.MandaysView(winMandays)
-        # self.window.withdraw()
-        # winMandays.deiconify()
+    # def mandayView(self):
+    #     pass
+    #     # winMandays = Toplevel()
+    #     # mandaysView.MandaysView(winMandays)
+    #     # self.window.withdraw()
+    #     # winMandays.deiconify()
+
+    def mergeView(self):
+        winMerge = Toplevel()
+        mergeView.MergeView(winMerge)
+        self.window.withdraw()
+        winMerge.deiconify()
+
 
     def billView(self):
         winBill = Toplevel()
