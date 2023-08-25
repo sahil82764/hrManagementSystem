@@ -6,7 +6,7 @@ from tkinter import messagebox
 from tkinter import filedialog
 import dashboard
 import database
-from datetime import datetime
+# from datetime import datetime
 import os, sys
 from util import util
 
@@ -57,14 +57,33 @@ class MergeView:
             print(f"An error occurred: {e} at line {sys.exc_info()[-1].tb_lineno}")
 
     def generate(self):
-         if (self.bill1.get() and self.bill2.get()):
-             util.mergeBill2(self.bill1.get(), self.bill2.get())
-         elif (self.bill1.get() and self.bill3.get()):
-             util.mergeBill2(self.bill1.get(), self.bill3.get())
-         elif (self.bill2.get() and self.bill3.get()):
-             util.mergeBill2(self.bill2.get(), self.bill3.get())
-         else:
-             messagebox.showerror("Error", "Please fill in all the fields.")
+        # print(self.bill1.get(),self.bill2.get())
+        if (self.bill1.get() and self.bill2.get()):
+            util.mergeBill2(self.bill1.get(), self.bill2.get())
+            
+            win = Toplevel()
+            dashboard.Dashboard(win)
+            self.window.withdraw()
+            win.deiconify()
+
+        elif (self.bill1.get() and self.bill3.get()):
+            util.mergeBill2(self.bill1.get(), self.bill3.get())
+
+            win = Toplevel()
+            dashboard.Dashboard(win)
+            self.window.withdraw()
+            win.deiconify()
+
+        elif (self.bill2.get() and self.bill3.get()):
+            util.mergeBill2(self.bill2.get(), self.bill3.get())
+
+            win = Toplevel()
+            dashboard.Dashboard(win)
+            self.window.withdraw()
+            win.deiconify()
+
+        else:
+            messagebox.showerror("Error", "Please fill in all the fields.")
 
         #     # Keep track of the number of segments added
         #     self.segment_count = 0

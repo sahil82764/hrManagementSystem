@@ -225,12 +225,12 @@ def createBill(billPath, current_month_claimed_mandays, last_month_claimed_manda
     active_bill_sheet['H64'] = util.get_spi_claim(nonBusSale, busSale, mandays, selectedStation)
 
     # =============== MANPOWER DEPLOYED CELLS =============================
-    active_bill_sheet['F8'] = current_month_estimate_sheet['I22'].value
-    active_bill_sheet['F9'] = current_month_estimate_sheet['F16'].value
-    active_bill_sheet['G8'] = current_month_estimate_sheet['I21'].value
-    active_bill_sheet['G9'] = current_month_estimate_sheet['F15'].value
-    active_bill_sheet['H8'] = current_month_estimate_sheet['I20'].value
-    active_bill_sheet['H9'] = current_month_estimate_sheet['F14'].value
+    active_bill_sheet['F8'] = int(current_month_estimate_sheet['I22'].value)
+    active_bill_sheet['F9'] = int(current_month_estimate_sheet['F16'].value)
+    active_bill_sheet['G8'] = int(current_month_estimate_sheet['I21'].value)
+    active_bill_sheet['G9'] = int(current_month_estimate_sheet['F15'].value)
+    active_bill_sheet['H8'] = int(current_month_estimate_sheet['I20'].value)
+    active_bill_sheet['H9'] = int(current_month_estimate_sheet['F14'].value)
 
 
     # =============== Saving Workbook  ===============

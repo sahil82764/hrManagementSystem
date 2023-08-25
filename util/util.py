@@ -131,7 +131,7 @@ def mergeBill2(file1, file2):
     file1Name = os.path.basename(file1)
     file2Name = os.path.basename(file2)
     
-    if file1.split("\\")[-2] == file2.split("\\")[-2]:
+    if file1.split("/")[-2] == file2.split("/")[-2]:
         if file1Name.split("-")[0].strip() != file2Name.split("-")[0].strip():
             messagebox.showerror("ERROR", "PLEASE ATTACH SAME VENDOR/MONTH FILE.")
         else:
@@ -196,9 +196,9 @@ def mergeBill2(file1, file2):
 
                 # MANPOWER DETAILS                
                 for row in range(8,10):
-                    output_sheet[f'F{row}'] = 0 if file1_sheet[f'F{row}'].value is None else file1_sheet[f'F{row}'].value + 0 if file2_sheet[f'F{row}'].value is None else file2_sheet[f'F{row}'].value
-                    output_sheet[f'G{row}'] = 0 if file1_sheet[f'G{row}'].value is None else file1_sheet[f'G{row}'].value + 0 if file2_sheet[f'G{row}'].value is None else file2_sheet[f'G{row}'].value
-                    output_sheet[f'H{row}'] = 0 if file1_sheet[f'H{row}'].value is None else file1_sheet[f'H{row}'].value + 0 if file2_sheet[f'H{row}'].value is None else file2_sheet[f'H{row}'].value
+                    output_sheet[f'F{row}'] = int(file1_sheet[f'F{row}'].value) + int(file2_sheet[f'F{row}'].value)
+                    output_sheet[f'G{row}'] = int(file1_sheet[f'G{row}'].value) + int(file2_sheet[f'G{row}'].value)
+                    output_sheet[f'H{row}'] = int(file1_sheet[f'H{row}'].value) + int(file2_sheet[f'H{row}'].value)
 
                 #DAYS AND MONTHS ENTRIES
                 output_sheet['M1'] = file1_sheet['M1'].value
@@ -215,7 +215,7 @@ def mergeBill2(file1, file2):
 
 
 
-                outputPath = save_bill(file1.split("\\")[-3], file1.split("\\")[-2], file1.split("\\")[-1].split("-")[0].strip(), "" )
+                outputPath = save_bill(file1.split("/")[-3], file1.split("/")[-2], file1.split("/")[-1].split("-")[0].strip(), "" )
 
                 outputWorkbook.save(outputPath)
                 messagebox.showinfo("Success", "Bill Generated successfully")
